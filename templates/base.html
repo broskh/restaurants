@@ -25,11 +25,11 @@
 				<div class="container main-menu">
 					<div class="row align-items-center d-flex">
 				      <div id="logo">
-				        <a href="index.html"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>
+				        <a href="booking/index.html"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>
 				      </div>
 				      <nav id="nav-menu-container">
 				        <ul class="nav-menu">
-				          <li><a href="index.html">Home</a></li>
+				          <li><a href="booking/index.html">Home</a></li>
 				        </ul>
 				      </nav><!-- #nav-menu-container -->					      		  
 					</div>
@@ -40,15 +40,15 @@
 			<section class="banner-area relative">
 				<div class="overlay overlay-bg"></div>				
 				<div class="container">
-					<div class="row fullscreen align-items-center justify-content-between">
-                        {% block body %}{% endblock %}
-                    </div>
+					<div class="row fullscreen align-items-center justify-content-between"></div>
 				</div>					
 			</section>
 			<!-- End banner Area -->
 
 			<!-- Start Content Area -->
-			<section class="content-area section-gap"></section>
+			<section class="content-area section-gap">
+                        {% block body %}{% endblock %}
+            </section>
 			<!-- End Content Area -->		
 
 			<!-- start footer Area -->		
