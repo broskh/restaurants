@@ -25,11 +25,11 @@
 				<div class="container main-menu">
 					<div class="row align-items-center d-flex">
 				      <div id="logo">
-				        <a href="booking/index.html"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>
+				        <a href="{% url 'booking:index' %}"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>
 				      </div>
 				      <nav id="nav-menu-container">
 				        <ul class="nav-menu">
-				          <li><a href="booking/index.html">Home</a></li>
+				          <li><a href="{% url 'booking:index' %}">Home</a></li>
 				        </ul>
 				      </nav><!-- #nav-menu-container -->					      		  
 					</div>

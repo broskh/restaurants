@@ -1,8 +1,10 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.template import loader
+from django.views.generic.base import TemplateView
 
 
-def index(request):
-    template = loader.get_template('booking/index.html')
-    return HttpResponse(template.render({}, request))
+# def index(request):
+#     return render(request, 'booking/index.html')
+from user_managment.models import Restaurant
+
+
+class IndexView(TemplateView):
+    template_name = 'booking/index.html'

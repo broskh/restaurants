@@ -18,7 +18,6 @@ from django.contrib import admin
 from booking import views as booking_views
 
 urlpatterns = [
-    url(r'^$', booking_views.index, name='index'),
     url(r'^admin/', admin.site.urls),
-    url(r'^booking/', include('booking.urls'))
+    url(r'^', include('booking.urls', namespace="booking")),
 ]
