@@ -12,6 +12,13 @@ $(document).ready(function() {
     //$(".fitscreen").css("height", fitscreen);
 
 
+    // ------- Datepicker  js --------//
+
+    $( function() {
+        $( ".date-picker" ).datepicker();
+    } );
+
+
     //------- Niceselect  js --------//  
 
     if (document.getElementById("default-select")) {
