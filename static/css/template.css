@@ -4494,3 +4494,46 @@ body.mobile-nav-active #mobile-nav-toggle {
 .footer-text a, .footer-text i {
   color: #f8b600;
 }
+
+/* =================================== */
+/*  Insurence Page Styles
+/* =================================== */
+.insurence-right h6, .insurence-left h6 {
+  font-weight: 500;
+}
+
+.insurence-right h1, .insurence-left h1 {
+  margin: 20px 0px;
+}
+
+.insurence-right p, .insurence-left p {
+  max-width: 445px;
+}
+
+.insurence-right img, .insurence-left img {
+  width: 100%;
+}
+
+.list-wrap {
+  background: #fbfcff;
+  max-width: 445px;
+  padding: 30px;
+}
+
+/*.list-wrap ul {*/
+  /*list-style-image: url("../img/insurence/bullet.png");*/
+/*}*/
+
+.list-wrap li {
+  padding-left: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+@media (max-width: 991px) {
+  .img-one {
+    margin-bottom: 45px;
+  }
+}

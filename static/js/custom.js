@@ -4,6 +4,6 @@ $(document).ready(function() {
     $(".time-picker").click (function () {
         $(".ui-timepicker-wrapper").css("width", $(this).css("width"))
     });
-    // $(".ui-timepicker-list").css("background-color", "black")
-    // $(".ui-timepicker-wrapper").css("width", $(".time-picker").css("width"))
+     $("label:has(input.form-check-input)").addClass("form-check-label");
+     $("li:has(label.form-check-label)").addClass("form-check");
 });

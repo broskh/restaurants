@@ -1,6 +1,5 @@
 from django.db import models
-from enum import Enum
-from user_managment import models as user_managment_models
+from user_managment.models import User
 
 
 class Booking(models.Model):
@@ -9,8 +8,8 @@ class Booking(models.Model):
         (2, 'Confermata'),
     )
 
-    client = models.ForeignKey(user_managment_models.User, related_name='client')
-    restaurant = models.ForeignKey(user_managment_models.User, related_name='restaurant')
+    client = models.ForeignKey(User, related_name='client')
+    restaurant = models.ForeignKey(User, related_name='restaurant')
     startTime = models.DateTimeField()
     endTime = models.DateTimeField()
     nPlaces = models.PositiveIntegerField(default=1)
