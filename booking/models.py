@@ -1,5 +1,5 @@
 from django.db import models
-from user_managment.models import User
+from user_management.models import User
 
 
 class Booking(models.Model):

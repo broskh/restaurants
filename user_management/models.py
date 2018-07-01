@@ -11,4 +11,4 @@ class User(AbstractUser):
     )
 
     user_type = models.PositiveSmallIntegerField(choices=TYPES, default=1)
-    restaurant_information = models.OneToOneField(Restaurant, null=True)
+    restaurant_information = models.OneToOneField(Restaurant, blank=True, null=True)

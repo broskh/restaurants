@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'booking',
     'search',
-    'user_managment',
+    'user_management',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -88,7 +88,7 @@ DATABASES = {
 }
 
 
-AUTH_USER_MODEL = 'user_managment.User'
+AUTH_USER_MODEL = 'user_management.User'
 
 
 # Password validation
