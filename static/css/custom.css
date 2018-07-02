@@ -114,3 +114,16 @@ p.result-detail {
 section.content-area {
     padding-bottom: 80px;
 }
+
+div.user-banner {
+    height: 300px;
+}
+
+.info-form .primary-btn {
+    margin-left: 15px;
+    margin-top: 15px;
+}
+
+h2 {
+    margin-bottom: 30px;
+}

@@ -12,12 +12,12 @@ class Service(models.Model):
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=250)
-    kitchenTypes = models.ManyToManyField(KitchenType)
+    kitchen_types = models.ManyToManyField(KitchenType)
     services = models.ManyToManyField(Service)
     city = models.CharField(max_length=300)
     address = models.CharField(max_length=300)
-    nPlaces = models.PositiveIntegerField(default=1)
-    bookingDuration = models.PositiveIntegerField(default=120)
+    n_places = models.PositiveIntegerField(default=1)
+    booking_duration = models.PositiveIntegerField(default=120)
 
 
 class MenuCategory(models.Model):
@@ -28,7 +28,7 @@ class MenuCategory(models.Model):
 class MenuVoice(models.Model):
     name = models.CharField(max_length=200)
     price = models.FloatField(default=0.0, validators=[MinValueValidator(0.0)])
-    menuCategory = models.ForeignKey(MenuCategory)
+    menu_category = models.ForeignKey(MenuCategory)
 
 
 class RestaurantImage(models.Model):

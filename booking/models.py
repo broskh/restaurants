@@ -10,7 +10,7 @@ class Booking(models.Model):
 
     client = models.ForeignKey(User, related_name='client')
     restaurant = models.ForeignKey(User, related_name='restaurant')
-    startTime = models.DateTimeField()
-    endTime = models.DateTimeField()
-    nPlaces = models.PositiveIntegerField(default=1)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    n_places = models.PositiveIntegerField(default=1)
     state = models.PositiveSmallIntegerField(choices=STATES)
