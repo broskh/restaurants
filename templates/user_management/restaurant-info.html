@@ -8,7 +8,8 @@
             <h2 class="text-uppercase">Informazioni ristorante</h2>
         </div>
         <div class="row">
-            <form class="info-form form-wrap" method="POST">
+            <form enctype="multipart/form-data" class="info-form form-wrap" method="post">
+                {% csrf_token %}
                 <div class="form-group row">
                     <label for="{{ form.name.name }}" class="col-sm-3 col-form-label">Nome: </label>
                     <div class="col-sm-9">
@@ -47,6 +48,12 @@
                     <div class="col col-sm-6">
                         <label for="{{ form.services.name }}">Servizi: </label>
                         {{ form.services }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="{{ form.load_image.name }}" class="col-sm-3 col-form-label">Carica foto: </label>
+                    <div class="col-sm-9">
+                        {{ form.load_image }}
                     </div>
                 </div>
                 <div class="form-group row">
