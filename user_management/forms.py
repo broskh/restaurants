@@ -25,7 +25,8 @@ class UserInfoForm (forms.ModelForm):
 
 class RestaurantInfoForm (forms.ModelForm):
     load_image = forms.ImageField(widget=forms.ClearableFileInput(
-        attrs={'multiple': True}))
+        attrs={'multiple': True,
+               'class':'custom-file-input'}))
 
     class Meta:
         model = Restaurant

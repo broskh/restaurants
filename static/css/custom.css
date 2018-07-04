@@ -86,10 +86,10 @@
 
 footer {
     position: fixed;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    margin-bottom: 0px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 0;
 }
 
 .img-results {
@@ -106,7 +106,7 @@ p.result-detail {
 }
 
 .section-gap {
-    padding: 0px;
+    padding: 0;
     margin-top: 50px;
     margin-bottom: 50px;
 }
@@ -126,4 +126,13 @@ div.user-banner {
 
 h2 {
     margin-bottom: 30px;
+}
+
+[for="load_image"] {
+    width: 95%;
+    margin-top: -1px;
+}
+
+span.loaded-image-name {
+    margin-left: 20px;
 }

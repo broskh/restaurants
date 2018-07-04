@@ -51,9 +51,29 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="{{ form.load_image.name }}" class="col-sm-3 col-form-label">Carica foto: </label>
-                    <div class="col-sm-9">
+                    <div class="col col-sm-3 custom-file">
+                        <span>Carica foto: </span>
+                    </div>
+                    <div class="col col-sm-9 custom-file">
+{#                    {{ form.load_image }}<input type="file" class="custom-file-input" id="customFile">#}
+                        <label class="custom-file-label" for="{{ form.load_image.name }}"></label>
                         {{ form.load_image }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col col-sm-4">
+                        <span>Foto già caricate:</span>
+                    </div>
+                    <div class="col col-sm-8">
+                        <ul id="list-loaded-images" class="list-group">
+                            {% for image in loaded_images %}
+                                <li id="loaded_{{ form.image.id }}" class="list-group-item">
+                                    <input type="button" data-id="{{ form.image.id }}" class="listelement" value="X" />
+                                    <span class="loaded-image-name">{{ form.image.name }}</span>
+                                    <input type="hidden" name="listed[]" value="{{ form.image.name }}">
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
                 <div class="form-group row">
