@@ -136,3 +136,47 @@ h2 {
 span.loaded-image-name {
     margin-left: 20px;
 }
+
+div.booking-banner {
+    height: 300px;
+}
+
+.w-100 {
+    height: 400px;
+}
+
+.restaurant-details {
+    font-size: 18px;
+}
+
+.restaurant-details h3 {
+     margin-top: 25px;
+     margin-bottom: 25px;
+}
+
+.details-block {
+     margin-top: 15px;
+ }
+
+.detail-label {
+    font-weight: bold;
+ }
+
+li .fa-chevron-right {
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+thead th {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.fa {
+    color: #777;;
+}
+
+#datetimepicker .timepicker-picker table.table-condensed {
+    width: auto;
+    margin: auto;
+}

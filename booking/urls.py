@@ -2,5 +2,5 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    # url(r'^results$', views.ResultsView.as_view(), name='detail'), # DA MODIFICARE
+    url(r'^detail/(?P<pk>[0-9]+)/$', views.RestaurantDetailView.as_view(), name='restaurant_detail'),
 ]

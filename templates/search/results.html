@@ -9,20 +9,20 @@
         {% for restaurant in restaurants %}
             <div class="row align-items-center result-element">
                 <div class="col-lg-3">
-                    <img class="img-thumbnail rounded float-left img-results" src="{% if restaurant.restaurantimage_set.all.0 %}{{ restaurant.restaurantimage_set.all.0.image }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">
+                    <img class="img-thumbnail rounded float-left img-results" src="{% if restaurant.restaurantimage_set.all.0 %}/static/img/loaded/{{ restaurant.restaurantimage_set.all.0.image }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">
                 </div>
                 <div class="col-lg-6">
                     <h3>{{ restaurant.name }}</h3>
                     <p class="result-detail">
-                        Indirizzo: {{ restaurant.address }}, {{ restaurant.city }}
+                        <span class="detail-label">Indirizzo: </span>{{ restaurant.address }}, {{ restaurant.city }}
                         <br>
-                        Tipi di cucina: {% for kitchenType in restaurant.kitchenTypes.all %}{%if not forloop.last%}{{ kitchenType.value }}, {% else %}{{ kitchenType.value }}{% endif %}{% endfor %}
+                        <span class="detail-label">Tipi di cucina: </span>{% for kitchen_type in restaurant.kitchen_types.all %}{%if not forloop.last%}{{ kitchen_type.value }}, {% else %}{{ kitchen_type.value }}{% endif %}{% endfor %}
                         <br>
-                        Servizi: {% for service in restaurant.services.all %}{%if not forloop.last%}{{ service.value }}, {% else %}{{ service.value }}{% endif %}{% endfor %}
+                        <span class="detail-label">Servizi: </span>{% for service in restaurant.services.all %}{%if not forloop.last%}{{ service.value }}, {% else %}{{ service.value }}{% endif %}{% endfor %}
                     </p>
                 </div>
                 <div class="col-lg-3">
-                    <button class="primary-btn text-uppercase" href="{% url 'booking:detail' %}">Dettagli</button>
+                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}">Dettagli</a>
                 </div>
             </div>
             <hr />

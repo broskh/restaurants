@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    timePicker = $(".time-picker");
+    let timePicker = $(".time-picker");
     timePicker.timepicker({ timeFormat: 'H:i',
                             scrollDefault: 'now' });
     timePicker.click (function () {
@@ -19,11 +19,29 @@ $(document).ready(function() {
         else if ($(this)[0].files.length > 1) {
             $(this).siblings("[for='load_image']").html($(this)[0].files.length + " File selezionati");
         }
-    })
+    });
 
     $('#list-loaded-images').delegate(".listelement", "click", function() {
         alert('miao');
-		var elemid = $(this).attr('data-id');
-		$("#loaded_"+elemid).remove();
+        let elemid = $(this).attr('data-id');
+        $("#loaded_"+elemid).remove();
+    });
+
+    $('#datetimepicker').datetimepicker({
+        inline: true,
+        sideBySide: true,
+        minDate: new Date(),
+        icons: {
+            time: 'fa fa-time',
+            date: 'fa fa-calendar',
+            up: 'fa fa-chevron-up',
+            down: 'fa fa-chevron-down',
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-screenshot',
+            clear: 'fa fa-trash',
+            close: 'fa fa-remove'
+        },
+        format: 'YYYY MMMM D H m'
     });
 });

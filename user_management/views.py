@@ -4,7 +4,7 @@ from .forms import *
 
 class ClientInfoView(FormView):
     form_class = UserInfoForm
-    template_name = 'user_management/user-info.html'
+    template_name = 'user_management/user_info.html'
 
     def form_valid(self, form):
         return super().form_valid(form)
@@ -12,7 +12,7 @@ class ClientInfoView(FormView):
 
 class RestaurantInfoView(FormView):
     form_class = RestaurantInfoForm
-    template_name = 'user_management/restaurant-info.html'
+    template_name = 'user_management/restaurant_info.html'
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context."""
