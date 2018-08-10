@@ -5,7 +5,7 @@ from .models import Restaurant
 
 class SearchView(FormView):
     form_class = SearchForm
-    # success_url = 'search/results.html'
+    # success_url = 'search/client_bookings.html'
 
     def form_valid(self, form):
         return super().form_valid(form)

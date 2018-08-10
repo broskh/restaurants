@@ -1,4 +1,6 @@
 from django.db import models
+
+from search.models import Restaurant
 from user_management.models import User
 
 
@@ -9,7 +11,7 @@ class Booking(models.Model):
     )
 
     client = models.ForeignKey(User, related_name='client')
-    restaurant = models.ForeignKey(User, related_name='restaurant')
+    restaurant = models.ForeignKey(Restaurant, related_name='restaurant')
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     n_places = models.PositiveIntegerField(default=1)

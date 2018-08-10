@@ -44,4 +44,13 @@ $(document).ready(function() {
         },
         format: 'YYYY MMMM D H m'
     });
+
+    $("input[type='radio'][name='type']").change(function(){
+        if (this.value === 'Ristorante') {
+            $("#restaurant-registration").removeClass('collapse')
+        }
+        else {
+            $("#restaurant-registration").addClass('collapse')
+        }
+    });
 });

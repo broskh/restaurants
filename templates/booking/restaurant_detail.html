@@ -31,12 +31,12 @@
                 </a>
             </div>
         </div>
-        <div class="row details-block">
+        <div class="row block">
             <div class="col col-sm-12">
                 <h3>{{ restaurant.name }}</h3>
             </div>
         </div>
-        <div class="row details-block">
+        <div class="row block">
             <div class="col col-sm-2">
                 <span class="detail-label">Indirizzo: </span>
             </div>
@@ -44,7 +44,7 @@
                 {{ restaurant.address }}, {{ restaurant.city }}
             </div>
         </div>
-        <div class="row details-block">
+        <div class="row block">
             <div class="col col-sm-2">
                 <span class="detail-label">Tipi di cucina: </span>
             </div>
@@ -56,7 +56,7 @@
                 </ul>
             </div>
         </div>
-        <div class="row details-block">
+        <div class="row block">
             <div class="col col-sm-2">
                 <span class="detail-label">Servizi: </span>
             </div>
@@ -68,13 +68,13 @@
                 </ul>
             </div>
         </div>
-        <div class="row details-block">
+        <div class="row block">
             <div class="col col-sm-12">
                 <span class="detail-label">Menù: </span>
             </div>
         </div>
         {% for menu_category in restaurant.menucategory_set.all %}
-            <div class="row details-block">
+            <div class="row block">
                 <div class="col offset-sm-1 col-sm-2">
                     <span>{{ menu_category.name }}: </span>
                 </div>
@@ -84,16 +84,16 @@
                             <li><i class="fa fa-chevron-right"></i>{{ menu_voice.name }} - €{{ menu_voice.price|floatformat:2 }}</li>
                         {% endfor %}
                     </ul>
-                    <hr/>
                 </div>
             </div>
+            <hr class="col offset-sm-1 col-sm-11" />
         {% endfor %}
-        <div class="row details-block">
+        <div class="row block">
             <div class="col col-sm-12">
                 <span class="detail-label">Disponibilità: </span>
             </div>
         </div>
-        <div class="row details-block">
+        <div class="row block">
             <div class="col col-sm-12" style="overflow:hidden;">
                 <div class="form-group">
                     <div class="row align-items-center">

@@ -1,0 +1,27 @@
+{% extends "user_management/user_base.html" %}
+{% block head %}
+    <title>Prenotazioni</title>
+{% endblock %}
+{% block content %}
+    <div class="container restaurant-bookings">
+        <div class="row block">
+            <div class="col col-sm-12" style="overflow:hidden;">
+                <div class="form-group">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div id="datetimepicker"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row block">
+            <div class="col col-sm-2">
+                <span class="detail-label">Posti prenotati: </span>
+            </div>
+            <div class="col col-sm-8">
+                <span id="places-reserved">n prenotati</span> / n totali
+            </div>
+        </div>
+    </div>
+{% endblock %}

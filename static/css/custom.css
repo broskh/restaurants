@@ -154,7 +154,16 @@ div.booking-banner {
      margin-bottom: 25px;
 }
 
-.details-block {
+.restaurant-bookings {
+    font-size: 18px;
+}
+
+.restaurant-bookings h3 {
+     margin-top: 25px;
+     margin-bottom: 25px;
+}
+
+.block {
      margin-top: 15px;
  }
 
@@ -179,4 +188,12 @@ thead th {
 #datetimepicker .timepicker-picker table.table-condensed {
     width: auto;
     margin: auto;
+}
+
+.primary-btn {
+    margin: 5px;
+}
+
+.primary-btn .fa {
+    color: white;
 }

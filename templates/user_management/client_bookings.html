@@ -1,0 +1,67 @@
+{% extends "user_management/user_base.html" %}
+{% load static %}
+{% block head %}
+    <title>Prenotazioni</title>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <hr />
+        {% for booking in object_list %}
+            <div class="row align-items-center result-element">
+                <div class="col-lg-3">
+                    <img class="img-thumbnail rounded float-left img-results" src="{% if booking.restaurant.restaurantimage_set.all.0 %}/static/img/loaded/{{ booking.restaurant.restaurantimage_set.all.0.image }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">
+                </div>
+                <div class="col-lg-6">
+                    <h3>{{ restaurant.name }}</h3>
+                    <p class="result-detail">
+                        <span class="detail-label">Nome: </span>{{ booking.restaurant.name }}
+                        <br>
+                        <span class="detail-label">Indirizzo: </span>{{ booking.restaurant.address }}, {{ booking.restaurant.city }}
+                        <br>
+                        <span class="detail-label">Stato: </span>{{ booking.restaurant.state }}
+                    </p>
+                </div>
+                <div class="col-lg-3">
+                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' booking.restaurant.id %}">Dettagli</a>
+                    <br>
+                    <a class="primary-btn text-uppercase" data-toggle="collapse" href="#editBooking{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="editBooking{{ forloop.counter }}">Modifica <i class="fa fa-chevron-down"></i></a>
+                    <br>
+                    <a class="primary-btn text-uppercase" href="">Elimina</a>
+                </div>
+            </div>
+            <div class="collapse row align-items-center" id="editBooking{{ forloop.counter }}">
+                <div class="col col-lg-12" style="overflow:hidden;">
+                    <div class="form-group">
+                        <div class="row align-items-center">
+                            <div class="col-md-12">
+                                <div id="datetimepicker"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        {% endfor %}
+{#        {% for restaurant in restaurants %}#}
+{#            <div class="row align-items-center result-element">#}
+{#                <div class="col-lg-3">#}
+{#                    <img class="img-thumbnail rounded float-left img-results" src="{% if restaurant.restaurantimage_set.all.0 %}/static/img/loaded/{{ restaurant.restaurantimage_set.all.0.image }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">#}
+{#                </div>#}
+{#                <div class="col-lg-6">#}
+{#                    <h3>{{ restaurant.name }}</h3>#}
+{#                    <p class="result-detail">#}
+{#                        <span class="detail-label">Indirizzo: </span>{{ restaurant.address }}, {{ restaurant.city }}#}
+{#                        <br>#}
+{#                        <span class="detail-label">Tipi di cucina: </span>{% for kitchen_type in restaurant.kitchen_types.all %}{%if not forloop.last%}{{ kitchen_type.value }}, {% else %}{{ kitchen_type.value }}{% endif %}{% endfor %}#}
+{#                        <br>#}
+{#                        <span class="detail-label">Servizi: </span>{% for service in restaurant.services.all %}{%if not forloop.last%}{{ service.value }}, {% else %}{{ service.value }}{% endif %}{% endfor %}#}
+{#                    </p>#}
+{#                </div>#}
+{#                <div class="col-lg-3">#}
+{#                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}">Dettagli</a>#}
+{#                </div>#}
+{#            </div>#}
+{#            <hr />#}
+{#        {% endfor %}#}
+    </div>
+{% endblock %}

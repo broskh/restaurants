@@ -1,6 +1,6 @@
 from django.http import request
 from django.shortcuts import get_object_or_404
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import DetailView, View
 from .forms import *
 from search.models import Restaurant
 

@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^restaurant/', include('booking.urls', namespace="booking")),
     url(r'^user/', include('user_management.urls', namespace="user_management")),
+    url(r'^', include('django.contrib.auth.urls')),
     url(r'^', include('search.urls', namespace="search")),
 ]
