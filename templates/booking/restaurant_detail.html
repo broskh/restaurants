@@ -10,14 +10,14 @@
         <div class="row">
             <div id="carouselExampleIndicators" class="carousel slide col col-sm-10 offset-sm-1" data-ride="carousel">
                 <ol class="carousel-indicators">
-                    {% for image in restaurant.restaurantimage_set.all %}
+                    {% for image in restaurant.images.all %}
                         <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}"{% if forloop.counter0 == 0 %} class="active"{% endif %}></li>
                     {% endfor %}
                 </ol>
                 <div class="carousel-inner">
-                    {% for image in restaurant.restaurantimage_set.all %}
+                    {% for image in restaurant.images.all %}
                         <div class="carousel-item{% if forloop.counter0 == 0 %} active{% endif %}">
-                            <img class="d-block w-100" src="/static/img/loaded/{{ image.image }}">
+                            <img class="d-block w-100" src="{{ image.image.url }}">
                         </div>
                     {% endfor %}
                 </div>
@@ -73,14 +73,14 @@
                 <span class="detail-label">Menù: </span>
             </div>
         </div>
-        {% for menu_category in restaurant.menucategory_set.all %}
+        {% for menu_category in restaurant.menu_categories.all %}
             <div class="row block">
                 <div class="col offset-sm-1 col-sm-2">
                     <span>{{ menu_category.name }}: </span>
                 </div>
                 <div class="col col-sm-7">
                     <ul>
-                        {% for menu_voice in menu_category.menuvoice_set.all %}
+                        {% for menu_voice in menu_category.menu_voices.all %}
                             <li><i class="fa fa-chevron-right"></i>{{ menu_voice.name }} - €{{ menu_voice.price|floatformat:2 }}</li>
                         {% endfor %}
                     </ul>
@@ -93,56 +93,23 @@
                 <span class="detail-label">Disponibilità: </span>
             </div>
         </div>
-        <div class="row block">
-            <div class="col col-sm-12" style="overflow:hidden;">
-                <div class="form-group">
-                    <div class="row align-items-center">
-                        <div class="col-md-10">
-                            <div id="datetimepicker"></div>
-                        </div>
-                        <div class="col-md-2">
-                            <button class="primary-btn text-uppercase">Prenota</button>
-                        </div>
-                    </div>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row align-items-center">
+                <div class="col-sm-8">
+                    <div id="restaurant_detail_datetimepicker" class="datetimepicker"></div>
+                </div>
+                <div class="col-sm-2">
+                    <label for="{{ form.n_places.name }}">Nº posti: </label>
+                    {{ form.n_places }}
+                </div>
+                <div class="col-sm-2">
+                    <input type="submit" class="primary-btn text-uppercase" value="Prenota" />
                 </div>
             </div>
-        </div>
+            <div class="collapse">
+                {{ form.start_time }}
+            </div>
+        </form>
     </div>
 {% endblock %}
-
-{#            <form class="info-form form-wrap" method="POST">#}
-{#                {% csrf_token %}#}
-{#                <div class="form-group row">#}
-{#                    <label for="{{ form.first_name.name }}" class="col-sm-2 col-form-label">Nome: </label>#}
-{#                    <div class="col-sm-10">#}
-{#                        {{ form.first_name }}#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="form-group row">#}
-{#                    <label for="{{ form.last_name.name }}" class="col-sm-2 col-form-label">Cognome: </label>#}
-{#                    <div class="col-sm-10">#}
-{#                        {{ form.last_name }}#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="form-group row">#}
-{#                    <label for="{{ form.email.name }}" class="col-sm-2 col-form-label">E-mail: </label>#}
-{#                    <div class="col-sm-10">#}
-{#                        {{ form.email }}#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="form-group row">#}
-{#                    <label for="{{ form.password.name }}" class="col-sm-2 col-form-label">Password: </label>#}
-{#                    <div class="col-sm-10">#}
-{#                        {{ form.password }}#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="form-group row">#}
-{#                    <label for="{{ form.confirm_password.name }}" class="col-sm-2 col-form-label">Conferma password: </label>#}
-{#                    <div class="col-sm-10">#}
-{#                        {{ form.confirm_password }}#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="form-group row">#}
-{#                    <input type="submit" class="primary-btn text-uppercase" value="Cerca"/>#}
-{#                </div>#}
-{#            </form>#}

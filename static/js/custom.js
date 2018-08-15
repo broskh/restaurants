@@ -1,4 +1,9 @@
 $(document).ready(function() {
+    $(function () {
+        $.ajaxSetup({
+            headers: { "X-CSRFToken": $.cookie("csrftoken") }
+        });
+    });
     let timePicker = $(".time-picker");
     timePicker.timepicker({ timeFormat: 'H:i',
                             scrollDefault: 'now' });
@@ -26,10 +31,19 @@ $(document).ready(function() {
         $("#loaded_"+elemid).remove();
     });
 
-    $('.datetimepicker').datetimepicker({
+    let datetimepicker = $('.datetimepicker');
+    let default_date = datetimepicker.data('start');
+    if (!default_date) {
+        default_date = false;
+    }
+    else {
+        default_date = new Date(default_date);
+    }
+    datetimepicker.datetimepicker({
         inline: true,
         sideBySide: true,
         minDate: new Date(),
+        defaultDate: default_date,
         icons: {
             time: 'fa fa-time',
             date: 'fa fa-calendar',
@@ -66,20 +80,6 @@ $(document).ready(function() {
         }
         hidden_categories.val(array);
         li.remove();
-        // id = $(this).data('id');
-        // csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-        // url = $(this).data('url');
-        // $.ajax({
-        //     url: url,
-        //     data: { 'id' : id },
-        //     method: 'POST',
-        //     beforeSend: function(xhr) {
-        //         xhr.setRequestHeader("X-CSRFToken", csrf_token);
-        //     },
-        //     success: function(){
-        //         $("#loaded_"+id).remove();
-        //     }
-        // });
     });
 
     $("#add-menu-category").click(function() {
@@ -181,6 +181,58 @@ $(document).ready(function() {
     if(restaurant_detail_datetimepicker.length){
         $("#id_start_time").val(restaurant_detail_datetimepicker.data("DateTimePicker").viewDate().format("YYYY-MM-DD-h-m-s"));
     }
+
+    $(".client_bookings_datetimepicker").on("dp.change",function (e) {
+        $(this).closest('.result-element').find("input[name='start_time']").val(e.date.format("YYYY-MM-DD-h-m-s"));
+    });
+
+    $(".delete-client-booking").click(function() {
+        let button = $(this);
+        let id = button.data('id');
+        let url = button.data('url');
+        $.ajax({
+            url: url,
+            data: { 'id' : id },
+            method: 'POST',
+            success: function(){
+                button.closest('.result-element').remove();
+            }
+        });
+    });
+
+    $(".save-edit-booking").click(function() {
+        let button = $(this);
+        let id = button.data('id');
+        let result_element = button.closest('.result-element');
+        let start_time = result_element.find("input[name='start_time']").val();
+        let n_places = result_element.find("input[name='n_places']").val();
+        let url = button.data('url');
+        $.ajax({
+            url: url,
+            data: { 'id' : id,
+                 'n_places' : n_places,
+                 'start_time' : start_time },
+            method: 'POST',
+            success: function(){
+                button.closest('.result-element').append('<div class="alert alert-success alert-dismissible">\n' +
+                    '  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>\n' +
+                    '  Modifica avvenuta con successo' +
+                    '</div>');
+            }
+        });
+    });
+
+    $(".client-edit-booking").click(function() {
+        let i = $(this).find('i');
+        if (i.hasClass('fa-chevron-down')) {
+            i.removeClass('fa-chevron-down');
+            i.addClass('fa-chevron-up');
+        }
+        else {
+            i.removeClass('fa-chevron-up');
+            i.addClass('fa-chevron-down');
+        }
+    });
 });
 
 function deleteCategory(button) {

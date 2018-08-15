@@ -1,9 +1,7 @@
 import json
 import os
-import re
 
 from django.contrib.auth import login
-from django.http import HttpResponse
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 
@@ -147,9 +145,11 @@ class RestaurantBookingsView(TemplateView):
 
 class ClientBookingsView(ListView):
     template_name = 'user_management/client_bookings.html'
-
-    model = Booking
     paginate_by = 50
+
+    def get_queryset(self):
+        queryset = Booking.objects.filter(client=self.request.user)
+        return queryset
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
