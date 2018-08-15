@@ -116,7 +116,7 @@ section.content-area {
 }
 
 div.user-banner {
-    height: 300px;
+    height: 280px;
 }
 
 .info-form .primary-btn {
@@ -133,12 +133,12 @@ h2 {
     margin-top: -1px;
 }
 
-span.loaded-image-name {
-    margin-left: 20px;
+div.booking-banner {
+    height: 280px;
 }
 
-div.booking-banner {
-    height: 300px;
+div.registration-banner {
+    height: 280px;
 }
 
 .w-100 {
@@ -185,7 +185,7 @@ thead th {
     color: #777;;
 }
 
-#datetimepicker .timepicker-picker table.table-condensed {
+.datetimepicker .timepicker-picker table.table-condensed {
     width: auto;
     margin: auto;
 }
@@ -196,4 +196,33 @@ thead th {
 
 .primary-btn .fa {
     color: white;
+}
+
+.form-container {
+    padding: 30px;
+}
+
+.margin-top-15 {
+    margin-top: 15px;
+}
+
+.margin-top-30 {
+    margin-top: 30px;
+}
+
+.list-group-item {
+    display: inline-flex;
+    align-items: center;
+}
+
+#add-menu-category {
+    margin-left: 15px;
+}
+
+#add-menu-voice{
+    margin-left: 15px;
+}
+
+#new-voice-price {
+    margin-left: 15px;
 }

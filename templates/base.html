@@ -19,7 +19,7 @@
 
 		<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
         <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
-        <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+        <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
         <link rel="stylesheet" href="{% static "css/jquery-ui.css" %}">
         <link rel="stylesheet" href="{% static "css/bootstrap-datepicker.css" %}">
         <link rel="stylesheet" href="{% static "css/jquery.timepicker.min.css" %}">
@@ -29,18 +29,51 @@
     </head>
     <body>
         <header id="header">
-            <div class="container main-menu">
-                <div class="row align-items-center d-flex">
-                  <div id="logo">
-                    <a href="{% url 'search:index' %}"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>
-                  </div>
-                  <nav id="nav-menu-container">
-                    <ul class="nav-menu">
-                      <li><a href="{% url 'search:index' %}">Home</a></li>
+            <nav class="nav-menu-container navbar-default">
+                <div class="container-fluid main-menu row d-flex align-items-center main-menu">
+                    <div class="navbar-header" id="logo">
+                        <a class=" navbar-brand" href="{% url 'search:index' %}"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>
+                    </div>
+                    <ul class="nav mr-auto nav-menu">
+                        <li><a href="{% url 'search:index' %}">Home</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'user_management:user_info' user.id %}">Gestione utente</a></li>
+                            {% if user.user_type == user.TYPES.2.0 %}
+                                <li><a href="{% url 'user_management:restaurant_info' user.restaurant_information.id %}">Gestione ristorante</a></li>
+                                <li><a href="{% url 'user_management:restaurant_bookings' user.restaurant_information.id %}">Resoconto prenotazioni</a></li>
+                            {% elif user.user_type == user.TYPES.1.0 %}
+                                <li><a href="{% url 'user_management:client_bookings' user.id %}">Gestione prenotazioni</a></li>
+                            {% endif %}
+                        {% endif %}
                     </ul>
-                  </nav><!-- #nav-menu-container -->
+                        <ul class="nav nav-menu ml-auto">
+                    {% if user.is_authenticated %}
+                            <li><a href="{% url 'logout' %}?next={% url 'search:index' %}">Logout</a></li>
+                    {% else %}
+                            <li><a href="{% url 'user_management:registration' %}?next={{request.path}}">Registrati</a></li>
+                            <li><a href="{% url 'login' %}?next={{request.path}}">Login</a></li>
+                    {% endif %}
+                        </ul>
                 </div>
-            </div>
+            </nav>
+{#            <div class="container main-menu">#}
+{#                <div class="row align-items-center d-flex">#}
+{#                    <div id="logo">#}
+{#                        <a href="{% url 'search:index' %}"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>#}
+{#                    </div>#}
+{#                    <nav id="nav-menu-container">#}
+{#                        <ul class="nav-menu mr-auto">#}
+{#                            <li><a href="{% url 'search:index' %}">Home</a></li>#}
+{#                        </ul>#}
+{#                        {% if user.is_authenticated %}#}
+{#                        {% else %}#}
+{#                            <ul class="nav-menu ml-auto">#}
+{#                                <li><a href="{% url 'login' %}">Login</a></li>#}
+{#                            </ul>#}
+{#                        {% endif %}#}
+{#                  </nav><!-- #nav-menu-container -->#}
+{#                </div>#}
+{#            </div>#}
         </header><!-- #header -->
 
         <!-- start banner Area -->

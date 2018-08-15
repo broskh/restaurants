@@ -7,79 +7,132 @@
         <div class="row">
             <h2 class="text-uppercase">Informazioni ristorante</h2>
         </div>
-        <div class="row">
             <form enctype="multipart/form-data" class="info-form form-wrap" method="post">
                 {% csrf_token %}
                 <div class="form-group row">
-                    <label for="{{ form.name.name }}" class="col-sm-3 col-form-label">Nome: </label>
-                    <div class="col-sm-9">
+                    <label for="{{ form.name.name }}" class="col-sm-2 col-form-label">Nome: </label>
+                    <div class="col-sm-4">
                         {{ form.name }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="{{ form.city.name }}" class="col-sm-3 col-form-label">Città: </label>
-                    <div class="col-sm-9">
+                    <label for="{{ form.city.name }}" class="col-sm-2 col-form-label">Città: </label>
+                    <div class="col-sm-4">
                         {{ form.city }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="{{ form.address.name }}" class="col-sm-3 col-form-label">Indirizzo: </label>
-                    <div class="col-sm-9">
+                    <label for="{{ form.address.name }}" class="col-sm-2 col-form-label">Indirizzo: </label>
+                    <div class="col-sm-4">
                         {{ form.address }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="{{ form.n_places.name }}" class="col-sm-3 col-form-label">Nº posti: </label>
-                    <div class="col-sm-9">
+                    <label for="{{ form.n_places.name }}" class="col-sm-2 col-form-label">Nº posti: </label>
+                    <div class="col-sm-4">
                         {{ form.n_places }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="{{ form.booking_duration.name }}" class="col-sm-3 col-form-label">Durata prenotazione: </label>
-                    <div class="col-sm-9">
+                    <label for="{{ form.booking_duration.name }}" class="col-sm-2 col-form-label">Durata prenotazione: </label>
+                    <div class="col-sm-4">
                         {{ form.booking_duration }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col col-sm-6">
+                    <div class="col col-sm-3">
                         <label for="{{ form.kitchen_types.name }}">Tipi di cucina: </label>
                         {{ form.kitchen_types }}
                     </div>
-                    <div class="col col-sm-6">
+                    <div class="col col-sm-3">
                         <label for="{{ form.services.name }}">Servizi: </label>
                         {{ form.services }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col col-sm-3 custom-file">
+                    <div class="col col-sm-2 custom-file">
                         <span>Carica foto: </span>
                     </div>
-                    <div class="col col-sm-9 custom-file">
+                    <div class="col col-sm-4 custom-file">
 {#                    {{ form.load_image }}<input type="file" class="custom-file-input" id="customFile">#}
                         <label class="custom-file-label" for="{{ form.load_image.name }}"></label>
                         {{ form.load_image }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col col-sm-4">
+                    <div class="col col-sm-2">
                         <span>Foto già caricate:</span>
                     </div>
-                    <div class="col col-sm-8">
+                    <div class="col col-sm-4">
                         <ul id="list-loaded-images" class="list-group">
-                            {% for image in loaded_images %}
-                                <li id="loaded_{{ form.image.id }}" class="list-group-item">
-                                    <input type="button" data-id="{{ form.image.id }}" class="listelement" value="X" />
-                                    <span class="loaded-image-name">{{ form.image.name }}</span>
-                                    <input type="hidden" name="listed[]" value="{{ form.image.name }}">
+                            {% for image in restaurant.images.all %}
+                                <li data-id="{{ image.id }}" class="list-group-item">
+                                    <span class="loaded-image-name">{{ image.filename }}</span>
+                                    <button type="button" class="delete-image-button btn ml-auto btn-default">
+                                        <span class="fa fa-trash"></span>
+                                    </button>
+                                    <input type="hidden" name="listed[]" value="{{ image.name }}">
                                 </li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <input type="submit" class="primary-btn text-uppercase" value="Cerca"/>
+                    <div class="col col-sm-2">
+                        <span>Menù:</span>
+                    </div>
+                    <div class="col col-sm-3">
+                        <div class="list-group" id="menu-categories" role="tablist">
+                            {% for category in restaurant.menu_categories.all %}
+                                <a class="list-group-item list-group-item-action{% if forloop.counter0 == 0 %} active{% endif %}" id="category{{ category.id }}" data-id="{{ category.id }}" data-toggle="list" href="#voices-category{{ category.id }}" role="tab" aria-controls="category{{ category.id }}">
+                                    {{ category.name }}
+                                    <button type="button" class="delete-category btn btn-default ml-auto">
+                                        <span class="fa fa-trash"></span>
+                                    </button>
+                                </a>
+                            {% endfor %}
+                        </div>
+                        <div class="margin-top-15 inline-flex">
+                            <input id="new-category-input" type="text" class="form-control border border-dark" placeholder="Nuova categoria">
+                            <button id="add-menu-category" type="button" class="btn float-right btn-default">
+                                <span class="fa fa-plus"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col col-sm-5">
+                        <div class="tab-content" id="menu-voices">
+                            {% for category in restaurant.menu_categories.all %}
+                                <div class="tab-pane fade show{% if forloop.counter0 == 0 %} active{% endif %}" id="voices-category{{ category.id }}" role="tabpanel" aria-labelledby="category{{ category.id }}">
+                                    <ul class="list-group">
+                                        {% for voice in category.menu_voices.all %}
+                                            <li class="list-group-item" data-id="{{ voice.id }}">
+                                                <span>{{ voice.name }} - {{ voice.price }}€</span>
+                                                <button type="button" class="delete-voice btn ml-auto btn-default">
+                                                    <span class="fa fa-trash"></span>
+                                                </button>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div id="new-voice" class="{% if restaurant.menu_categories.count  == 0%}collapse {% endif %}margin-top-15 inline-flex">
+                            <input id="new-voice-name" type="text" class="form-control border border-dark" placeholder="Nuovo Piatto">
+                            <input id="new-voice-price" type="number" class="form-control border border-dark" placeholder="Prezzo">
+                            <button id="add-menu-voice" type="button" class="btn float-right btn-default">
+                                <span class="fa fa-plus"></span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+                <div class="form-group row">
+                    <input type="submit" class="primary-btn text-uppercase" value="Salva"/>
+                </div>
+                {{ form.remove_images }}
+                {{ form.add_categories }}
+                {{ form.remove_categories }}
+                {{ form.add_voices }}
+                {{ form.remove_voices }}
             </form>
-        </div>
     </div>
 {% endblock %}

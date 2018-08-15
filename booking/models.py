@@ -6,12 +6,12 @@ from user_management.models import User
 
 class Booking(models.Model):
     STATES = (
-        (1, 'In attesa'),
-        (2, 'Confermata'),
+        (0, 'In attesa'),
+        (1, 'Confermata'),
     )
 
-    client = models.ForeignKey(User, related_name='client')
-    restaurant = models.ForeignKey(Restaurant, related_name='restaurant')
+    client = models.ForeignKey(User, related_name='client_bookings')
+    restaurant = models.ForeignKey(Restaurant, related_name='restaurant_bookings')
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     n_places = models.PositiveIntegerField(default=1)

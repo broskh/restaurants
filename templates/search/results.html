@@ -22,7 +22,7 @@
                     </p>
                 </div>
                 <div class="col-lg-3">
-                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}">Dettagli</a>
+                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}?n_places={{request.GET.n_clients}}">Dettagli</a>
                 </div>
             </div>
             <hr />
