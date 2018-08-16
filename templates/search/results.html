@@ -5,11 +5,14 @@
 {% endblock %}
 {% block content %}
     <div class="container">
-        <hr />
-        {% for restaurant in restaurants %}
+        <div class="row margin-top-30 margin-bottom-30">
+            <h3 class="text-success">Ristoranti disponibili</h3>
+        </div>
+        {% for restaurant in restaurants_available %}
+            <hr />
             <div class="row align-items-center result-element">
                 <div class="col-lg-3">
-                    <img class="img-thumbnail rounded float-left img-results" src="{% if restaurant.restaurantimage_set.all.0 %}/static/img/loaded/{{ restaurant.restaurantimage_set.all.0.image }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">
+                    <img class="img-thumbnail rounded float-left img-results" src="{% if restaurant.images.all.0 %}{{ restaurant.images.all.0.image.url }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">
                 </div>
                 <div class="col-lg-6">
                     <h3>{{ restaurant.name }}</h3>
@@ -25,7 +28,32 @@
                     <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}?n_places={{request.GET.n_clients}}">Dettagli</a>
                 </div>
             </div>
-            <hr />
         {% endfor %}
+        <hr />
+        <div class="row margin-top-30 margin-bottom-30">
+            <h3 class="text-danger">Ristoranti al momento occupati</h3>
+        </div>
+        {% for restaurant in restaurants_busy %}
+            <hr />
+            <div class="row align-items-center result-element">
+                <div class="col-lg-3">
+                    <img class="img-thumbnail rounded float-left img-results" src="{% if restaurant.images.all.0 %}{{ restaurant.images.all.0.image.url }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">
+                </div>
+                <div class="col-lg-6">
+                    <h3>{{ restaurant.name }}</h3>
+                    <p class="result-detail">
+                        <span class="detail-label">Indirizzo: </span>{{ restaurant.address }}, {{ restaurant.city }}
+                        <br>
+                        <span class="detail-label">Tipi di cucina: </span>{% for kitchen_type in restaurant.kitchen_types.all %}{%if not forloop.last%}{{ kitchen_type.value }}, {% else %}{{ kitchen_type.value }}{% endif %}{% endfor %}
+                        <br>
+                        <span class="detail-label">Servizi: </span>{% for service in restaurant.services.all %}{%if not forloop.last%}{{ service.value }}, {% else %}{{ service.value }}{% endif %}{% endfor %}
+                    </p>
+                </div>
+                <div class="col-lg-3">
+                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}?n_places={{request.GET.n_clients}}">Dettagli</a>
+                </div>
+            </div>
+        {% endfor %}
+        <hr />
     </div>
 {% endblock %}

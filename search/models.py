@@ -15,12 +15,14 @@ class Service(models.Model):
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=250)
-    kitchen_types = models.ManyToManyField(KitchenType)
-    services = models.ManyToManyField(Service)
+    kitchen_types = models.ManyToManyField(KitchenType, blank=True, name='kitchen_types')
+    services = models.ManyToManyField(Service, blank=True)
     city = models.CharField(max_length=300)
     address = models.CharField(max_length=300)
     n_places = models.PositiveIntegerField()
     booking_duration = models.PositiveIntegerField()
+    longitude = models.FloatField(default=None, blank=True, null=True)
+    latitude = models.FloatField(default=None, blank=True, null=True)
 
 
 class MenuCategory(models.Model):

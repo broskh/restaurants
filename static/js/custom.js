@@ -4,6 +4,10 @@ $(document).ready(function() {
             headers: { "X-CSRFToken": $.cookie("csrftoken") }
         });
     });
+
+    $(".date-picker").datepicker({
+        format: 'dd/mm/yyyy' });
+
     let timePicker = $(".time-picker");
     timePicker.timepicker({ timeFormat: 'H:i',
                             scrollDefault: 'now' });
