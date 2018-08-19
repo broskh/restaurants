@@ -1,5 +1,9 @@
 from math import radians, sin, atan2, sqrt, cos
 import requests
+from django.db.models import Sum, Q
+
+from booking.models import Booking
+from user_management.models import Restaurant
 
 GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
 R = 6373.0
@@ -34,3 +38,13 @@ def get_coordinates(address):
         return response['results'][0]['geometry']['location']
     else:
         return None
+
+
+def count_bookings(restaurant_id, time):
+    restaurant = Restaurant.objects.get(id=restaurant_id)
+    bookings = Booking.objects.filter(restaurant=restaurant).filter(Q(start_time__lte=time) & Q(end_time__gte=time))
+    bookings = bookings.filter(state=Booking.STATES[1][0])
+    occupied_places = bookings.aggregate(Sum('n_places'))['n_places__sum']
+    if not occupied_places:
+        occupied_places = 0
+    return occupied_places

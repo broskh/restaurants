@@ -1,8 +1,6 @@
-from time import strftime
-
 from django import forms
 from .models import User
-from search.models import Restaurant, KitchenType, Service
+from .models import Restaurant, KitchenType, Service
 
 
 class UserInfoForm (forms.ModelForm):
@@ -31,7 +29,7 @@ class UserInfoForm (forms.ModelForm):
 
 class RestaurantInfoForm (forms.ModelForm):
     load_image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True,
-                                                                         'class':'custom-file-input'}),
+                                                                         'class': 'custom-file-input'}),
                                   required=False)
     remove_images = forms.Field(widget=forms.HiddenInput(), required=False)
     add_categories = forms.Field(widget=forms.HiddenInput(), required=False)
@@ -64,8 +62,7 @@ class RestaurantInfoForm (forms.ModelForm):
 
 
 class RegistrationForm (forms.Form):
-    USER_TYPES=[User.TYPES[1],
-                User.TYPES[2]]
+    USER_TYPES = [User.TYPES[1], User.TYPES[2]]
 
     username = forms.CharField(widget=forms.TextInput(attrs={
             'class': 'form-control'}),

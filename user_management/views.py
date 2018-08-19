@@ -3,15 +3,12 @@ import os
 from datetime import datetime
 
 from django.contrib.auth import login
-from django.db.models import Q, Sum
 from django.utils import timezone
 from django.http import JsonResponse
-from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 
-from booking.models import Booking
-from restaurants.utils import get_coordinates
-from search.models import RestaurantImage, MenuCategory, MenuVoice
+from restaurants.utils import get_coordinates, count_bookings
+from .models import RestaurantImage, MenuCategory, MenuVoice, Restaurant, Service, KitchenType
 from .forms import *
 
 
@@ -107,8 +104,8 @@ class RestaurantInfoView(FormView):
             )
 
         if form.cleaned_data['remove_images']:
-            for id in form.cleaned_data['remove_images'].split(','):
-                image = RestaurantImage.objects.get(id=id)
+            for image_id in form.cleaned_data['remove_images'].split(','):
+                image = RestaurantImage.objects.get(id=image_id)
                 os.remove(image.image.path)
                 image.delete()
 
@@ -123,7 +120,7 @@ class RestaurantInfoView(FormView):
                 )
                 if add_voices:
                     for voice in add_voices:
-                        if voice['category_id']==category['id']:
+                        if voice['category_id'] == category['id']:
                             voice['category_id'] = new_category.id
 
         if form.cleaned_data['remove_categories']:
@@ -151,26 +148,6 @@ class RestaurantInfoView(FormView):
         return super(RestaurantInfoView, self).form_valid(form)
 
 
-class RestaurantBookingsView(TemplateView):
-    template_name = 'user_management/restaurant_bookings.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(RestaurantBookingsView, self).get_context_data(**kwargs)
-        restaurant = Restaurant.objects.get(id=self.kwargs['restaurant_id'])
-        context['total_places'] = restaurant.n_places
-        context['occupied_places'] = count_bookings(restaurant.id, datetime.now())
-        return context
-
-
-class ClientBookingsView(ListView):
-    template_name = 'user_management/client_bookings.html'
-    paginate_by = 50
-
-    def get_queryset(self):
-        queryset = Booking.objects.filter(client=self.request.user)
-        return queryset
-
-
 class RegistrationView(FormView):
     form_class = RegistrationForm
     template_name = 'user_management/registration.html'
@@ -195,7 +172,7 @@ class RegistrationView(FormView):
             if position:
                 lng = position['lng']
                 lat = position['lat']
-            restaurant=Restaurant.objects.create(
+            restaurant = Restaurant.objects.create(
                 name=form.cleaned_data['restaurant_name'],
                 address=form.cleaned_data['address'],
                 city=form.cleaned_data['city'],
@@ -208,7 +185,7 @@ class RegistrationView(FormView):
                 restaurant.services.add(Service.objects.get(id=service))
             for kitchen_type in form.cleaned_data['kitchen_types']:
                 restaurant.kitchen_types.add(KitchenType.objects.get(id=kitchen_type))
-            user.restaurant_information=restaurant
+            user.restaurant_information = restaurant
             user.save()
         login(self.request, user)
         return super(RegistrationView, self).form_valid(form)
@@ -217,16 +194,6 @@ class RegistrationView(FormView):
 def count_restaurant_bookings(request):
     response = {}
     time = timezone.make_aware(datetime.strptime(request.POST['time'], '%Y-%m-%d-%H-%M-%S'),
-                                     timezone.get_current_timezone())
+                               timezone.get_current_timezone())
     response['occupied_places'] = count_bookings(request.POST['restaurant_id'], time)
     return JsonResponse(response)
-
-
-def count_bookings(restaurant_id, time):
-    restaurant = Restaurant.objects.get(id=restaurant_id)
-    bookings = Booking.objects.filter(restaurant=restaurant).filter(Q(start_time__lte=time) & Q(end_time__gte=time))
-    bookings = bookings.filter(state=Booking.STATES[1][0])
-    occupied_places = bookings.aggregate(Sum('n_places'))['n_places__sum']
-    if not occupied_places:
-        occupied_places = 0
-    return occupied_places

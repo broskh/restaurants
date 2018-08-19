@@ -1,7 +1,6 @@
 from django.db import models
 
-from search.models import Restaurant
-from user_management.models import User
+from user_management.models import User, Restaurant
 
 
 class Booking(models.Model):

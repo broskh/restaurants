@@ -32,10 +32,10 @@
             <nav class="nav-menu-container navbar-default">
                 <div class="container-fluid main-menu row d-flex align-items-center main-menu">
                     <div class="navbar-header" id="logo">
-                        <a class=" navbar-brand" href="{% url 'search:index' %}"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>
+                        <a class=" navbar-brand" href="{% url 'booking:index' %}"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>
                     </div>
                     <ul class="nav mr-auto nav-menu">
-                        <li><a href="{% url 'search:index' %}">Home</a></li>
+                        <li><a href="{% url 'booking:index' %}">Home</a></li>
                         {% if user.is_authenticated %}
                             <li><a href="{% url 'user_management:user_info' user.id %}">Gestione utente</a></li>
                             {% if user.user_type == user.TYPES.2.0 %}
@@ -48,7 +48,7 @@
                     </ul>
                         <ul class="nav nav-menu ml-auto">
                     {% if user.is_authenticated %}
-                            <li><a href="{% url 'logout' %}?next={% url 'search:index' %}">Logout</a></li>
+                            <li><a href="{% url 'logout' %}?next={% url 'booking:index' %}">Logout</a></li>
                     {% else %}
                             <li><a href="{% url 'user_management:registration' %}?next={{request.path}}">Registrati</a></li>
                             <li><a href="{% url 'login' %}?next={{request.path}}">Login</a></li>
@@ -56,24 +56,6 @@
                         </ul>
                 </div>
             </nav>
-{#            <div class="container main-menu">#}
-{#                <div class="row align-items-center d-flex">#}
-{#                    <div id="logo">#}
-{#                        <a href="{% url 'search:index' %}"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>#}
-{#                    </div>#}
-{#                    <nav id="nav-menu-container">#}
-{#                        <ul class="nav-menu mr-auto">#}
-{#                            <li><a href="{% url 'search:index' %}">Home</a></li>#}
-{#                        </ul>#}
-{#                        {% if user.is_authenticated %}#}
-{#                        {% else %}#}
-{#                            <ul class="nav-menu ml-auto">#}
-{#                                <li><a href="{% url 'login' %}">Login</a></li>#}
-{#                            </ul>#}
-{#                        {% endif %}#}
-{#                  </nav><!-- #nav-menu-container -->#}
-{#                </div>#}
-{#            </div>#}
         </header><!-- #header -->
 
         <!-- start banner Area -->
