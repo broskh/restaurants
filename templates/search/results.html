@@ -25,7 +25,7 @@
                     </p>
                 </div>
                 <div class="col-lg-3">
-                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}?n_places={{request.GET.n_clients}}">Dettagli</a>
+                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}?n_places={{request.GET.n_clients}}&datetime={{datetime|date:"Y-m-d\TH%3\Ai%3\As"}}">Dettagli</a>
                 </div>
             </div>
         {% endfor %}
@@ -50,7 +50,7 @@
                     </p>
                 </div>
                 <div class="col-lg-3">
-                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}?n_places={{request.GET.n_clients}}">Dettagli</a>
+                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}?n_places={{request.GET.n_clients}}&datetime={{datetime|date:"Y-m-d\TH%3\Ai%3\As"}}">Dettagli</a>
                 </div>
             </div>
         {% endfor %}

@@ -1,9 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from django.db.models import Count, Q, Sum
+from django.db.models import Count, Sum, Q
 from django.utils import timezone
 from django.views.generic.edit import FormView
 
+from booking.models import Booking
 from restaurants.utils import get_coordinates, positions_distance
 from .forms import *
 from .models import Restaurant
@@ -74,14 +75,19 @@ class ResultsView(SearchView):
                         restaurants_available = restaurants_available.exclude(id=restaurant.id)
                         break
 
-            occupied_places = restaurant.restaurant_bookings.filter(start_time__lte=search_datetime, end_time__gte=search_datetime).aggregate(Sum('n_places'))['n_places__sum']
+            end_time = search_datetime + timedelta(minutes=restaurant.booking_duration)
+            occupied_places = restaurant.restaurant_bookings.filter(
+                (Q(start_time__lte=search_datetime) & Q(end_time__gte=search_datetime)) |
+                (Q(start_time__lte=end_time) & Q(end_time__gte=end_time)))
+            occupied_places = occupied_places.filter(state=Booking.STATES[1][0])
+            occupied_places = occupied_places.aggregate(Sum('n_places'))['n_places__sum']
             if not occupied_places:
                 occupied_places = 0
-            print(occupied_places)
             if occupied_places + int(self.request.GET['n_clients']) > restaurant.n_places:
                 restaurants_available = restaurants_available.exclude(id=restaurant.id)
                 restaurants_busy.append(restaurant)
 
         context['restaurants_available'] = restaurants_available
         context['restaurants_busy'] = restaurants_busy
+        context['datetime'] = datetime.strptime(self.request.GET['date']+'-'+self.request.GET['time'], '%d/%m/%Y-%H:%M')
         return context

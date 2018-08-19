@@ -7,7 +7,7 @@
     <div class="container">
         <hr />
         {% for booking in object_list %}
-            <div class="result-element">
+            <div class="result-element" data-id="{{ booking.id }}" >
                 <div class="row align-items-center">
                     <div class="col-lg-3">
                         <img class="img-thumbnail rounded float-left img-results" src="{% if booking.restaurant.images.all.0 %}{{ booking.restaurant.images.all.0.image.url }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">
@@ -27,46 +27,29 @@
                         <br>
                         <a class="client-edit-booking primary-btn text-uppercase" data-toggle="collapse" href="#editBooking{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="editBooking{{ forloop.counter }}">Modifica <i class="fa fa-chevron-down"></i></a>
                         <br>
-                        <button type="button" data-id="{{ booking.id }}" data-url="{% url 'booking:delete_booking' %}" class="primary-btn text-uppercase delete-client-booking" href="">Elimina</button>
+                        <button type="button" data-url="{% url 'booking:delete_booking' %}" class="primary-btn text-uppercase delete-client-booking" href="">Elimina</button>
                     </div>
                 </div>
                 <div class="collapse row align-items-center" id="editBooking{{ forloop.counter }}">
-                        <div class="col-sm-8">
-                            <div id="client_bookings_datetimepicker{{ booking.id }}" class="client_bookings_datetimepicker datetimepicker" data-start="{{ booking.start_time|date:"Y-m-d\TH:i:s" }}"></div>
+                    <div class="col-sm-8">
+                        <div id="client_bookings_datetimepicker{{ booking.id }}" class="client_bookings_datetimepicker" data-start="{{ booking.start_time|date:"Y-m-d\TH:i:s" }}"></div>
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="n_places">Nº posti: </label>
+                        <input type="number" name="n_places" value="{{ booking.n_places }}" class="form-control"/>
+                    </div>
+                    <input type="hidden" name="start_time" value="{{ booking.start_time|date:"Y-m-d-H-i-s" }}"/>
+                    <input type="hidden" name="state" value="{{ booking.state }}"/>
+                    <div class="col-sm-2">
+                        <button type="button" data-restaurant_id="{{ booking.restaurant.id }}" data-url="{% url 'booking:check_availability' %}" class="check-availability-for-edit row primary-btn primary-btn-blue text-uppercase justify-content-center">Disponibilità</button>
+                        <span class="booking-availability-for-edit row margin-top-15 margin-bottom-15 text-info justify-content-center"></span>
+                        <div class="justify-content-center row">
+                            <button disabled type="button" data-url="{% url 'booking:edit_booking' %}" class="save-edit-booking primary-btn text-uppercase">Salva</button>
                         </div>
-                        <div class="col-sm-2">
-                            <label for="n_places">Nº posti: </label>
-                            <input type="number" name="n_places" value="{{ booking.n_places }}" class="form-control"/>
-                        </div>
-                        <input type="hidden" name="start_time" value="{{ booking.start_time|date:"Y-m-d-H-i-s" }}"/>
-                        <div class="col-sm-2">
-                            <button type="button" data-url="{% url 'booking:edit_booking' %}" data-id="{{ booking.id }}" class="save-edit-booking primary-btn text-uppercase">Salva</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
             <hr />
         {% endfor %}
-{#        {% for restaurant in restaurants %}#}
-{#            <div class="row align-items-center result-element">#}
-{#                <div class="col-lg-3">#}
-{#                    <img class="img-thumbnail rounded float-left img-results" src="{% if restaurant.restaurantimage_set.all.0 %}/static/img/loaded/{{ restaurant.restaurantimage_set.all.0.image }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">#}
-{#                </div>#}
-{#                <div class="col-lg-6">#}
-{#                    <h3>{{ restaurant.name }}</h3>#}
-{#                    <p class="result-detail">#}
-{#                        <span class="detail-label">Indirizzo: </span>{{ restaurant.address }}, {{ restaurant.city }}#}
-{#                        <br>#}
-{#                        <span class="detail-label">Tipi di cucina: </span>{% for kitchen_type in restaurant.kitchen_types.all %}{%if not forloop.last%}{{ kitchen_type.value }}, {% else %}{{ kitchen_type.value }}{% endif %}{% endfor %}#}
-{#                        <br>#}
-{#                        <span class="detail-label">Servizi: </span>{% for service in restaurant.services.all %}{%if not forloop.last%}{{ service.value }}, {% else %}{{ service.value }}{% endif %}{% endfor %}#}
-{#                    </p>#}
-{#                </div>#}
-{#                <div class="col-lg-3">#}
-{#                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}">Dettagli</a>#}
-{#                </div>#}
-{#            </div>#}
-{#            <hr />#}
-{#        {% endfor %}#}
     </div>
 {% endblock %}

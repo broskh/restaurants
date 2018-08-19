@@ -1,21 +1,26 @@
 import json
 import os
+from datetime import datetime
 
 from django.contrib.auth import login
+from django.db.models import Q, Sum
+from django.utils import timezone
+from django.http import JsonResponse
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView
 
 from booking.models import Booking
+from restaurants.utils import get_coordinates
 from search.models import RestaurantImage, MenuCategory, MenuVoice
 from .forms import *
 
 
-class ClientInfoView(FormView):
+class UserInfoView(FormView):
     form_class = UserInfoForm
     template_name = 'user_management/user_info.html'
 
     def get_initial(self):
-        initial = super(ClientInfoView, self).get_initial()
+        initial = super(UserInfoView, self).get_initial()
         initial['username'] = self.request.user.username
         initial['first_name'] = self.request.user.first_name
         initial['last_name'] = self.request.user.last_name
@@ -26,16 +31,20 @@ class ClientInfoView(FormView):
         return self.request.path  # or whatever url you want to redirect to
 
     def form_valid(self, form):
-        user = self.request.user
-        user.username = form.cleaned_data['username']
+        user = User.objects.get(id=self.request.user.id)
         user.set_password(form.cleaned_data['password'])
+        user.username = form.cleaned_data['username']
         user.email = form.cleaned_data['email']
-        user.first_name = form.cleaned_data['first_name']
-        user.last_name = form.cleaned_data['last_name']
+        # user.first_name = form.cleaned_data['first_name']
+        # user.last_name = form.cleaned_data['last_name']
 
         user.save()
         login(self.request, user)
-        return super(ClientInfoView, self).form_valid(form)
+        return super(UserInfoView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return super(UserInfoView, self).form_invalid(form)
 
 
 class RestaurantInfoView(FormView):
@@ -65,6 +74,15 @@ class RestaurantInfoView(FormView):
 
     def form_valid(self, form):
         restaurant = Restaurant.objects.get(id=self.kwargs['restaurant_id'])
+        if restaurant.address != form.cleaned_data['address'] or restaurant.city != form.cleaned_data['city']:
+            position = get_coordinates(form.cleaned_data['city'] + ', ' + form.cleaned_data['address'])
+            if position:
+                restaurant.longitude = position['lng']
+                restaurant.latitude = position['lat']
+            else:
+                restaurant.longitude = None
+                restaurant.latitude = None
+
         restaurant.name = form.cleaned_data['name']
         restaurant.city = form.cleaned_data['city']
         restaurant.address = form.cleaned_data['address']
@@ -140,6 +158,7 @@ class RestaurantBookingsView(TemplateView):
         context = super(RestaurantBookingsView, self).get_context_data(**kwargs)
         restaurant = Restaurant.objects.get(id=self.kwargs['restaurant_id'])
         context['total_places'] = restaurant.n_places
+        context['occupied_places'] = count_bookings(restaurant.id, datetime.now())
         return context
 
 
@@ -150,11 +169,6 @@ class ClientBookingsView(ListView):
     def get_queryset(self):
         queryset = Booking.objects.filter(client=self.request.user)
         return queryset
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['now'] = timezone.now()
-    #     return context
 
 
 class RegistrationView(FormView):
@@ -175,12 +189,20 @@ class RegistrationView(FormView):
                 user_type=form.cleaned_data['type']
         )
         if int(form.cleaned_data['type']) == User.TYPES[2][0]:
+            position = get_coordinates(form.cleaned_data['city']+', '+form.cleaned_data['address'])
+            lng = None
+            lat = None
+            if position:
+                lng = position['lng']
+                lat = position['lat']
             restaurant=Restaurant.objects.create(
                 name=form.cleaned_data['restaurant_name'],
                 address=form.cleaned_data['address'],
                 city=form.cleaned_data['city'],
                 n_places=form.cleaned_data['n_places'],
                 booking_duration=form.cleaned_data['booking_duration'],
+                longitude=lng,
+                latitude=lat,
             )
             for service in form.cleaned_data['services']:
                 restaurant.services.add(Service.objects.get(id=service))
@@ -190,3 +212,21 @@ class RegistrationView(FormView):
             user.save()
         login(self.request, user)
         return super(RegistrationView, self).form_valid(form)
+
+
+def count_restaurant_bookings(request):
+    response = {}
+    time = timezone.make_aware(datetime.strptime(request.POST['time'], '%Y-%m-%d-%H-%M-%S'),
+                                     timezone.get_current_timezone())
+    response['occupied_places'] = count_bookings(request.POST['restaurant_id'], time)
+    return JsonResponse(response)
+
+
+def count_bookings(restaurant_id, time):
+    restaurant = Restaurant.objects.get(id=restaurant_id)
+    bookings = Booking.objects.filter(restaurant=restaurant).filter(Q(start_time__lte=time) & Q(end_time__gte=time))
+    bookings = bookings.filter(state=Booking.STATES[1][0])
+    occupied_places = bookings.aggregate(Sum('n_places'))['n_places__sum']
+    if not occupied_places:
+        occupied_places = 0
+    return occupied_places

@@ -61,6 +61,33 @@ $(document).ready(function() {
         },
         format: 'YYYY MMMM D H m'
     });
+    let client_bookings_datetimepicker = $(".client_bookings_datetimepicker");
+    client_bookings_datetimepicker.each(function () {
+        default_date = $(this).data('start');
+        if (!default_date) {
+            default_date = false;
+        }
+        else {
+            default_date = new Date(default_date);
+        }
+        $(this).datetimepicker({
+            inline: true,
+            sideBySide: true,
+            defaultDate: default_date,
+            icons: {
+                time: 'fa fa-time',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            },
+            format: 'YYYY MMMM D H m'
+        });
+    });
 
     $("input[type='radio'][name='type']").change(function(){
         if (this.value === '3') {
@@ -180,19 +207,24 @@ $(document).ready(function() {
 
     let restaurant_detail_datetimepicker = $("#restaurant_detail_datetimepicker");
     restaurant_detail_datetimepicker.on("dp.change",function (e) {
-        $("#id_start_time").val(e.date.format("YYYY-MM-DD-h-m-s"));
+        $("#id_start_time").val(e.date.format("YYYY-MM-DD-H-m-s"));
+        $("#booking-availability").html('');
+        $("#book-button").prop('disabled', true);
     });
     if(restaurant_detail_datetimepicker.length){
-        $("#id_start_time").val(restaurant_detail_datetimepicker.data("DateTimePicker").viewDate().format("YYYY-MM-DD-h-m-s"));
+        $("#id_start_time").val(restaurant_detail_datetimepicker.data("DateTimePicker").viewDate().format("YYYY-MM-DD-H-m-s"));
     }
 
-    $(".client_bookings_datetimepicker").on("dp.change",function (e) {
-        $(this).closest('.result-element').find("input[name='start_time']").val(e.date.format("YYYY-MM-DD-h-m-s"));
+    client_bookings_datetimepicker.on("dp.change",function (e) {
+        let result_element = $(this).closest('.result-element');
+        result_element.find("input[name='start_time']").val(e.date.format("YYYY-MM-DD-H-m-s"));
+        result_element.find(".booking-availability-for-edit").html('');
+        result_element.find(".save-edit-booking").prop('disabled', true);
     });
 
     $(".delete-client-booking").click(function() {
         let button = $(this);
-        let id = button.data('id');
+        let id = $(this).closest('.result-element').data('id');
         let url = button.data('url');
         $.ajax({
             url: url,
@@ -204,18 +236,58 @@ $(document).ready(function() {
         });
     });
 
-    $(".save-edit-booking").click(function() {
+    let save_edit_booking = $('.save-edit-booking');
+    if (save_edit_booking.length > 0) {
+        save_edit_booking.closest('.result-element').find("input[name='n_places']").on('input', function() {
+            $(this).closest('.result-element').find('.save-edit-booking').prop('disabled', true);
+        });
+    }
+
+    $(".check-availability-for-edit").click(function() {
         let button = $(this);
-        let id = button.data('id');
-        let result_element = button.closest('.result-element');
+        let result_element = $(this).closest('.result-element');
+        let url = button.data('url');
+        let n_places = result_element.closest('.result-element').find("input[name='n_places']").val();
         let start_time = result_element.find("input[name='start_time']").val();
+        let booking_id = result_element.data('id');
+        let id = button.data('restaurant_id');
+        $.ajax({
+            url: url,
+            data: { 'restaurant_id' : id,
+                    'n_places' : n_places,
+                    'start_time' : start_time,
+                    'booking_id' : booking_id },
+            method: 'POST',
+            success: function(response){
+                let save_button = result_element.find(".save-edit-booking");
+                if (response['result'] === 'ok') {
+                    result_element.find(".booking-availability-for-edit").html('Disponibile');
+                    save_button.html('Salva');
+                }
+                else if (response['result'] === 'busy') {
+                    result_element.find(".booking-availability-for-edit").html('Non Disponibile');
+                    save_button.html('Vai in coda');
+                }
+                save_button.prop('disabled', false);
+                result_element.find("input[name='state']").val(response['state']);
+            }
+        });
+    });
+
+    save_edit_booking.click(function() {
+        let button = $(this);
+        let result_element = button.closest('.result-element');
+        let id = result_element.data('id');
+        let start_time = result_element.find("input[name='start_time']").val();
+        let state = result_element.find("input[name='state']").val();
         let n_places = result_element.find("input[name='n_places']").val();
         let url = button.data('url');
         $.ajax({
             url: url,
             data: { 'id' : id,
                  'n_places' : n_places,
-                 'start_time' : start_time },
+                 'start_time' : start_time,
+                 'state' : state },
             method: 'POST',
             success: function(){
                 button.closest('.result-element').append('<div class="alert alert-success alert-dismissible">\n' +
@@ -236,6 +308,56 @@ $(document).ready(function() {
             i.removeClass('fa-chevron-up');
             i.addClass('fa-chevron-down');
         }
+    });
+
+    if ($('#book-button').length > 0) {
+        $( "#id_n_places" ).on('input', function() {
+            $("#book-button").prop('disabled', true);
+        });
+    }
+
+    $("#check-availability").click(function() {
+        let button = $(this);
+        let url = button.data('url');
+        let n_places = $("#id_n_places").val();
+        let start_time = $("#id_start_time").val();
+        let id = button.data('restaurant_id');
+        $.ajax({
+            url: url,
+            data: { 'restaurant_id' : id,
+                 'n_places' : n_places,
+                 'start_time' : start_time },
+            method: 'POST',
+            success: function(response){
+                let book_button = $("#book-button");
+                if (response['result'] === 'ok') {
+                    $("#booking-availability").html('Disponibile');
+                    book_button.prop('disabled', false);
+                    book_button.val('Prenota');
+                }
+                else if (response['result'] === 'busy') {
+                    $("#booking-availability").html('Non disponibile');
+                    book_button.prop('disabled', false);
+                    book_button.val('Vai in coda');
+                }
+                $("#id_state").val(response['state']);
+            }
+        });
+    });
+
+    $("#restaurant_bookings_datetimepicker").on("dp.change",function (e) {
+        let url = $(this).data('url');
+        let time = e.date.format("YYYY-MM-DD-H-m-s");
+        let id =$(this).data('id');
+        $.ajax({
+            url: url,
+            data: { 'restaurant_id' : id,
+                 'time' : time },
+            method: 'POST',
+            success: function(response){
+                $('#places-reserved').html(response['occupied_places']);
+            }
+        });
     });
 });
 

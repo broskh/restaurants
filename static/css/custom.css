@@ -214,6 +214,10 @@ thead th {
     margin-bottom: 30px;
 }
 
+.margin-bottom-15 {
+    margin-bottom: 15px;
+}
+
 .list-group-item {
     display: inline-flex;
     align-items: center;
@@ -229,4 +233,13 @@ thead th {
 
 #new-voice-price {
     margin-left: 15px;
+}
+
+button.primary-btn-blue {
+    background-color: #007bff!important;
+}
+
+.primary-btn:disabled,
+.primary-btn[disabled]{
+    background: #D3D3D3;
 }

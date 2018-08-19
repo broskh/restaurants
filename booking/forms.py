@@ -6,7 +6,7 @@ class BookingForm (forms.ModelForm):
 
     class Meta:
         model = Booking
-        fields = ['start_time', 'n_places']
+        fields = ['start_time', 'n_places', 'state']
 
     def __init__(self, *args, **kwargs):
         super(BookingForm, self).__init__(*args, **kwargs)
@@ -14,3 +14,5 @@ class BookingForm (forms.ModelForm):
         self.fields['start_time'].input_formats = ['%Y-%m-%d-%H-%M-%S']
         self.fields['n_places'].widget = forms.NumberInput(attrs={
             'class': 'form-control'})
+        self.fields['state'].widget = forms.Select()
+        self.fields['state'].choices = Booking.STATES

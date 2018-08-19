@@ -97,18 +97,23 @@
             {% csrf_token %}
             <div class="row align-items-center">
                 <div class="col-sm-8">
-                    <div id="restaurant_detail_datetimepicker" class="datetimepicker"></div>
+                    <div id="restaurant_detail_datetimepicker" data-start="{{ request.GET.datetime }}" class="datetimepicker"></div>
                 </div>
                 <div class="col-sm-2">
                     <label for="{{ form.n_places.name }}">Nº posti: </label>
                     {{ form.n_places }}
                 </div>
                 <div class="col-sm-2">
-                    <input type="submit" class="primary-btn text-uppercase" value="Prenota" />
+                    <button type="button" id="check-availability" data-restaurant_id="{{ view.kwargs.restaurant_id }}" data-url="{% url 'booking:check_availability' %}" class="row primary-btn primary-btn-blue text-uppercase justify-content-center">Disponibilità</button>
+                    <span id="booking-availability" class="row margin-top-15 margin-bottom-15 text-info justify-content-center"></span>
+                    <div class="justify-content-center row">
+                        <input id="book-button" disabled type="submit" class="primary-btn text-uppercase" value="Prenota" />
+                    </div>
                 </div>
             </div>
             <div class="collapse">
                 {{ form.start_time }}
+                {{ form.state }}
             </div>
         </form>
     </div>

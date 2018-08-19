@@ -6,7 +6,7 @@
     <div class="container restaurant-bookings">
         <div class="row align-items-center">
             <div class="col-sm-12">
-                <div id="restaurant_bookings_datetimepicker" class="datetimepicker"></div>
+                <div id="restaurant_bookings_datetimepicker" class="datetimepicker" data-url="{% url "user_management:count_restaurant_bookings" %}" data-id="{{ view.kwargs.restaurant_id }}"></div>
             </div>
         </div>
         <div class="row margin-top-30">
@@ -14,7 +14,7 @@
                 <span class="detail-label text-info">Posti prenotati: </span>
             </div>
             <div class="col col-sm-8">
-                <span id="places-reserved">n prenotati</span> / {{ total_places }}
+                <span id="places-reserved">{{ occupied_places }}</span> / {{ total_places }}
             </div>
         </div>
     </div>

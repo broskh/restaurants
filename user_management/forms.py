@@ -112,11 +112,3 @@ class RegistrationForm (forms.Form):
     booking_duration = forms.CharField(widget=forms.NumberInput(attrs={
             'class': 'form-control'}),
             required=False)
-
-    # name = models.CharField(max_length=250)
-    # kitchenTypes = models.ManyToManyField(KitchenType)
-    # services = models.ManyToManyField(Service)
-    # city = models.CharField(max_length=300)
-    # address = models.CharField(max_length=300)
-    # nPlaces = models.PositiveIntegerField(default=1)
-    # bookingDuration = models.PositiveIntegerField(default=120)
