@@ -90,7 +90,7 @@ class User(AbstractUser):
     )
 
     user_type = models.PositiveSmallIntegerField(choices=TYPES, blank=True, null=True)
-    restaurant_information = models.OneToOneField(Restaurant, blank=True, null=True)
+    restaurant_information = models.OneToOneField(Restaurant, blank=True, null=True, on_delete=models.SET_NULL)
     REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
 
     def is_client(self):

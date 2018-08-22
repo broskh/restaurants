@@ -21,9 +21,9 @@ from restaurants import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^user/', include('user_management.urls', namespace="user_management")),
+    url(r'^user/', include(('user_management.urls', 'user_management'), namespace="user_management")),
     url(r'^', include('django.contrib.auth.urls')),
-    url(r'^', include('booking.urls', namespace="booking")),
+    url(r'^', include(('booking.urls', 'booking'), namespace="booking")),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
