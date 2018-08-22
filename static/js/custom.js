@@ -169,7 +169,7 @@ $(document).ready(function() {
         let input_price = $('#new-voice-price');
         let voice_name = input_name.val();
         let voice_price = input_price.val();
-        if (!isFloat(voice_price)) {
+        if (!isFloat(voice_price) && !isInt(voice_price)) {
             $('#new-voice').after('<div class="margin-top-15 alert alert-danger alert-dismissible">\n' +
                     '  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>\n' +
                     '  Il prezzo inserito non è valido' +

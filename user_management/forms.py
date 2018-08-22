@@ -83,12 +83,12 @@ class RestaurantInfoForm (forms.ModelForm):
         self.fields['kitchen_types'].widget = forms.CheckboxSelectMultiple(attrs={
             'class': 'form-check-input'})
         self.fields['kitchen_types'].choices = KitchenType.objects.values_list('id', 'value')
-        self.fields['kitchen_types'].required = True
+        self.fields['kitchen_types'].required = False
         self.fields['kitchen_types'].label = 'Tipi di cucina:'
         self.fields['services'].widget = forms.CheckboxSelectMultiple(attrs={
             'class': 'form-check-input'})
         self.fields['services'].choices = Service.objects.values_list('id', 'value')
-        self.fields['services'].required = True
+        self.fields['services'].required = False
         self.fields['services'].label = 'Servizi:'
         self.fields['city'].widget = forms.TextInput(attrs={
             'class': 'form-control',

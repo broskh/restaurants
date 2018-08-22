@@ -64,7 +64,7 @@ class RestaurantImageAdmin(admin.ModelAdmin):
 
 class MenuVoiceAdmin(admin.ModelAdmin):
     fields = ['name', 'price', 'menu_category']
-    list_display = ('name', 'price')
+    list_display = ('name', 'price', 'menu_category')
     list_filter = ['menu_category']
     search_fields = ['name']
 

@@ -60,7 +60,7 @@ class MenuCategory(models.Model):
     restaurant = models.ForeignKey(Restaurant, related_name='menu_categories', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.name + ': ' + self.restaurant.name
 
 
 class MenuVoice(models.Model):
@@ -69,7 +69,7 @@ class MenuVoice(models.Model):
     menu_category = models.ForeignKey(MenuCategory, related_name='menu_voices', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.name + '-' + self.menu_category.name + ': ' + self.menu_category.restaurant.name
 
 
 class RestaurantImage(models.Model):
