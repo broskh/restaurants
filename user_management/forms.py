@@ -80,13 +80,11 @@ class RestaurantInfoForm (forms.ModelForm):
             'max_length': 200})
         self.fields['name'].required = True
         self.fields['name'].label = 'Nome:'
-        self.fields['kitchen_types'].widget = forms.CheckboxSelectMultiple(attrs={
-            'class': 'form-check-input'})
+        self.fields['kitchen_types'].widget = forms.CheckboxSelectMultiple()
         self.fields['kitchen_types'].choices = KitchenType.objects.values_list('id', 'value')
         self.fields['kitchen_types'].required = False
         self.fields['kitchen_types'].label = 'Tipi di cucina:'
-        self.fields['services'].widget = forms.CheckboxSelectMultiple(attrs={
-            'class': 'form-check-input'})
+        self.fields['services'].widget = forms.CheckboxSelectMultiple()
         self.fields['services'].choices = Service.objects.values_list('id', 'value')
         self.fields['services'].required = False
         self.fields['services'].label = 'Servizi:'
@@ -119,13 +117,11 @@ class RegistrationForm (UserInfoForm):
             required=False,
             max_length=200,
             label='Nome del ristorante:')
-    kitchen_types = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={
-            'class': 'form-check-input'}),
+    kitchen_types = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(),
             choices=KitchenType.objects.values_list('id', 'value'),
             required=False,
             label='Tipi di cucina:')
-    services = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={
-            'class': 'form-check-input'}),
+    services = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(),
             choices=Service.objects.values_list('id', 'value'),
             required=False,
             label='Serivizi:')

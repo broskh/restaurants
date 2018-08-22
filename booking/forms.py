@@ -46,9 +46,9 @@ class SearchForm (forms.Form):
                                                                    }))
     services = forms.MultipleChoiceField(
         choices=Service.objects.values_list('id', 'value'),
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        widget=forms.CheckboxSelectMultiple(),
         label='Servizi')
     kitchen_types = forms.MultipleChoiceField(
         choices=KitchenType.objects.values_list('id', 'value'),
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        widget=forms.CheckboxSelectMultiple(),
         label='Tipi di cucina')

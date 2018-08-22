@@ -398,6 +398,8 @@ $(document).ready(function() {
             }
         });
     });
+
+   $("input[type='checkbox']").closest('label').css('margin-bottom', '0');
 });
 
 function deleteCategory(button) {
