@@ -1,36 +1,68 @@
 {% extends "booking/booking_base.html" %}
 {% block head %}
-    <title>Dettaglio ristorante</title>
+    <title>{{ restaurant.name }}</title>
 {% endblock %}
 {% block content %}
     <div class="container restaurant-details">
-        <div class="row">
-            <h2 class="text-uppercase">Dettagli ristorante</h2>
-        </div>
-        <div class="row">
-            <div id="carouselExampleIndicators" class="carousel slide col col-sm-10 offset-sm-1" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    {% for image in restaurant.images.all %}
-                        <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}"{% if forloop.counter0 == 0 %} class="active"{% endif %}></li>
-                    {% endfor %}
-                </ol>
-                <div class="carousel-inner">
-                    {% for image in restaurant.images.all %}
-                        <div class="carousel-item{% if forloop.counter0 == 0 %} active{% endif %}">
-                            <img class="d-block w-100" src="{{ image.image.url }}">
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="row alert alert-danger" role="alert">
+                        <div class="col-lg-12">
+                            {{ error|escape }}
                         </div>
-                    {% endfor %}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="row alert alert-danger" role="alert">
+                    <div class="col-lg-12">
+                        {{ error|escape }}
+                    </div>
                 </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
+            {% endfor %}
+        {% endif %}
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                    <div class="row alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <div class="row">
+            <h2 class="text-uppercase">{{ webpage_title }}</h2>
         </div>
+        {% if restaurant.images.all %}
+            <div class="row margin-bottom-30">
+                <div id="carouselExampleIndicators" class="carousel slide col col-sm-10 offset-sm-1" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        {% for image in restaurant.images.all %}
+                            <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}"{% if forloop.counter0 == 0 %} class="active"{% endif %}></li>
+                        {% endfor %}
+                    </ol>
+                    <div class="carousel-inner">
+                        {% for image in restaurant.images.all %}
+                            <div class="carousel-item{% if forloop.counter0 == 0 %} active{% endif %}">
+                                <img class="d-block w-100" src="{{ image.image.url }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
         <div class="row block">
             <div class="col col-sm-12">
                 <h3>{{ restaurant.name }}</h3>
@@ -38,7 +70,7 @@
         </div>
         <div class="row block">
             <div class="col col-sm-2">
-                <span class="detail-label">Indirizzo: </span>
+                <span class="detail-label">{{ address_label }} </span>
             </div>
             <div class="col col-sm-8">
                 {{ restaurant.address }}, {{ restaurant.city }}
@@ -46,7 +78,7 @@
         </div>
         <div class="row block">
             <div class="col col-sm-2">
-                <span class="detail-label">Tipi di cucina: </span>
+                <span class="detail-label">{{ kitchen_types_label }} </span>
             </div>
             <div class="col col-sm-8">
                 <ul>
@@ -58,7 +90,7 @@
         </div>
         <div class="row block">
             <div class="col col-sm-2">
-                <span class="detail-label">Servizi: </span>
+                <span class="detail-label">{{ services_label }} </span>
             </div>
             <div class="col col-sm-8">
                 <ul>
@@ -70,7 +102,7 @@
         </div>
         <div class="row block">
             <div class="col col-sm-12">
-                <span class="detail-label">Menù: </span>
+                <span class="detail-label">{{ menu_label }} </span>
             </div>
         </div>
         {% for menu_category in restaurant.menu_categories.all %}
@@ -90,7 +122,7 @@
         {% endfor %}
         <div class="row block">
             <div class="col col-sm-12">
-                <span class="detail-label">Disponibilità: </span>
+                <span class="detail-label">{{ booking_label }} </span>
             </div>
         </div>
         <form method="POST">
@@ -100,14 +132,14 @@
                     <div id="restaurant_detail_datetimepicker" data-start="{{ request.GET.datetime }}" class="datetimepicker"></div>
                 </div>
                 <div class="col-sm-2">
-                    <label for="{{ form.n_places.name }}">Nº posti: </label>
+                    <label for="{{ form.n_places.name }}">{{ n_places_label }} </label>
                     {{ form.n_places }}
                 </div>
                 <div class="col-sm-2">
-                    <button type="button" id="check-availability" data-restaurant_id="{{ view.kwargs.restaurant_id }}" data-url="{% url 'booking:check_availability' %}" class="row primary-btn primary-btn-blue text-uppercase justify-content-center">Disponibilità</button>
-                    <span id="booking-availability" class="row margin-top-15 margin-bottom-15 text-info justify-content-center"></span>
+                    <button type="button" id="check-availability" data-restaurant_id="{{ view.kwargs.restaurant_id }}" {% if user.is_authenticated %}data-client_id="{{ user.id }}"{% endif %} data-url="{% url 'booking:check_availability' %}" class="row primary-btn primary-btn-blue text-uppercase justify-content-center">{{ availability_button }}</button>
+                    <span id="booking-availability" class="text-center row margin-top-15 margin-bottom-15 text-info justify-content-center"></span>
                     <div class="justify-content-center row">
-                        <input id="book-button" disabled type="submit" class="primary-btn text-uppercase" value="Prenota" />
+                        <input id="book-button" disabled type="submit" class="primary-btn text-uppercase" value="{{ book_button }}" />
                     </div>
                 </div>
             </div>

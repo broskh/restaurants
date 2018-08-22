@@ -1,56 +1,81 @@
 {% extends "booking/search_base.html" %}
 {% load static %}
 {% block head %}
-    <title>Restaurants - Result</title>
+    <title>{{ webpage_title }}</title>
 {% endblock %}
 {% block content %}
     <div class="container">
+        {% if error_message %}
+            <div class="row alert alert-danger" role="alert">
+                <div class="col-lg-12">
+                    {{ error_message }}
+                </div>
+            </div>
+        {% endif %}
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="row alert alert-danger" role="alert">
+                        <div class="col-lg-12">
+                            {{ error|escape }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="row alert alert-danger" role="alert">
+                    <div class="col-lg-12">
+                        {{ error|escape }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
         <div class="row margin-top-30 margin-bottom-30">
-            <h3 class="text-success">Ristoranti disponibili</h3>
+            <h3 class="text-success">{{ restaurants_available_title }}</h3>
         </div>
-        {% for restaurant in restaurants_available %}
+        {% for element in restaurants_available %}
             <hr />
             <div class="row align-items-center result-element">
                 <div class="col-lg-3">
-                    <img class="img-thumbnail rounded float-left img-results" src="{% if restaurant.images.all.0 %}{{ restaurant.images.all.0.image.url }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">
+                    <img class="img-thumbnail rounded float-left img-results" src="{% if element.restaurant.images.all.0 %}{{ element.restaurant.images.all.0.image.url }}{% else %}{% static "img/no-image.png" %}{% endif %}" alt="">
                 </div>
                 <div class="col-lg-6">
-                    <h3>{{ restaurant.name }}</h3>
+                    <h3>{{ element.restaurant.name }}</h3>
                     <p class="result-detail">
-                        <span class="detail-label">Indirizzo: </span>{{ restaurant.address }}, {{ restaurant.city }}
+                        <span class="detail-label">{{ address_label }} </span>{{ element.restaurant.address }}, {{ element.restaurant.city }}
                         <br>
-                        <span class="detail-label">Tipi di cucina: </span>{% for kitchen_type in restaurant.kitchen_types.all %}{%if not forloop.last%}{{ kitchen_type.value }}, {% else %}{{ kitchen_type.value }}{% endif %}{% endfor %}
+                        <span class="detail-label">{{ kitchen_types_label }} </span>{% for kitchen_type in element.restaurant.kitchen_types.all %}{%if not forloop.last%}{{ kitchen_type.value }}, {% else %}{{ kitchen_type.value }}{% endif %}{% endfor %}
                         <br>
-                        <span class="detail-label">Servizi: </span>{% for service in restaurant.services.all %}{%if not forloop.last%}{{ service.value }}, {% else %}{{ service.value }}{% endif %}{% endfor %}
+                        <span class="detail-label">{{ services_label }} </span>{% for service in element.restaurant.services.all %}{%if not forloop.last%}{{ service.value }}, {% else %}{{ service.value }}{% endif %}{% endfor %}
                     </p>
                 </div>
                 <div class="col-lg-3">
-                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}?n_places={{request.GET.n_clients}}&datetime={{datetime|date:"Y-m-d\TH%3\Ai%3\As"}}">Dettagli</a>
+                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' element.restaurant.id %}?n_places={{request.GET.n_clients}}&datetime={{datetime|date:"Y-m-d\TH%3\Ai%3\As"}}">{{ button_text }}</a>
                 </div>
             </div>
         {% endfor %}
         <hr />
         <div class="row margin-top-30 margin-bottom-30">
-            <h3 class="text-danger">Ristoranti al momento occupati</h3>
+            <h3 class="text-danger">{{ restaurants_busy_title }}</h3>
         </div>
-        {% for restaurant in restaurants_busy %}
+        {% for element in restaurants_busy %}
             <hr />
             <div class="row align-items-center result-element">
                 <div class="col-lg-3">
-                    <img class="img-thumbnail rounded float-left img-results" src="{% if restaurant.images.all.0 %}{{ restaurant.images.all.0.image.url }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">
+                    <img class="img-thumbnail rounded float-left img-results" src="{% if element.restaurant.images.all.0 %}{{ element.restaurant.images.all.0.image.url }}{% else %}{% static "img/no-image.png" %}{% endif %}" alt="">
                 </div>
                 <div class="col-lg-6">
-                    <h3>{{ restaurant.name }}</h3>
+                    <h3>{{ element.restaurant.name }}</h3>
                     <p class="result-detail">
-                        <span class="detail-label">Indirizzo: </span>{{ restaurant.address }}, {{ restaurant.city }}
+                        <span class="detail-label">{{ address_label }} </span>{{ element.restaurant.address }}, {{ element.restaurant.city }}
                         <br>
-                        <span class="detail-label">Tipi di cucina: </span>{% for kitchen_type in restaurant.kitchen_types.all %}{%if not forloop.last%}{{ kitchen_type.value }}, {% else %}{{ kitchen_type.value }}{% endif %}{% endfor %}
+                        <span class="detail-label">{{ kitchen_types_label }} </span>{% for kitchen_type in element.restaurant.kitchen_types.all %}{%if not forloop.last%}{{ kitchen_type.value }}, {% else %}{{ kitchen_type.value }}{% endif %}{% endfor %}
                         <br>
-                        <span class="detail-label">Servizi: </span>{% for service in restaurant.services.all %}{%if not forloop.last%}{{ service.value }}, {% else %}{{ service.value }}{% endif %}{% endfor %}
+                        <span class="detail-label">{{ services_label }} </span>{% for service in element.restaurant.services.all %}{%if not forloop.last%}{{ service.value }}, {% else %}{{ service.value }}{% endif %}{% endfor %}
                     </p>
                 </div>
                 <div class="col-lg-3">
-                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' restaurant.id %}?n_places={{request.GET.n_clients}}&datetime={{datetime|date:"Y-m-d\TH%3\Ai%3\As"}}">Dettagli</a>
+                    <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' element.restaurant.id %}?n_places={{request.GET.n_clients}}&datetime={{datetime|date:"Y-m-d\TH%3\Ai%3\As"}}">{{ button_text }}</a>
                 </div>
             </div>
         {% endfor %}

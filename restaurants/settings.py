@@ -26,13 +26,14 @@ SECRET_KEY = '8bn35gapvx8h=ic@fyrpj8dciqvk*@d(uporj)lfi^oz9hu0c!'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'booking',
-    'user_management',
+    'booking.apps.BookingConfig',
+    'user_management.apps.UserManagmentConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -81,8 +82,8 @@ DATABASES = {
         'NAME': 'djangorestaurants',
         'USER': 'userrestaurants',
         'PASSWORD': 'restaurants2018',
-        'HOST': 'localhost', #default localhost
-        'PORT': '3306', #default dipende dal DB
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -140,3 +141,5 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'restaurant.noreply@gmail.com'
 EMAIL_HOST_PASSWORD = 'restaurantsUNIMORE2018'
+
+LOGIN_URL = '/login/'

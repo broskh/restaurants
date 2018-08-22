@@ -1,55 +1,73 @@
 {% extends "user_management/user_base.html" %}
 {% block head %}
-    <title>Registrazione</title>
+    <title>{{ webpage_title }}</title>
 {% endblock %}
 {% block content %}
     <div class="container">
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="row alert alert-danger" role="alert">
+                        <div class="col-lg-12">
+                            {{ error|escape }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="row alert alert-danger" role="alert">
+                    <div class="col-lg-12">
+                        {{ error|escape }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
         <div class="row">
-            <h2 class="text-uppercase">Registrazione</h2>
+            <h2 class="text-uppercase">{{ title }}</h2>
         </div>
         <div class="row">
             <form class="form-wrap" method="POST">
                 {% csrf_token %}
                 <div class="form-group row">
-                    <label for="{{ form.username.name }}" class="col-sm-4 col-form-label">Username: </label>
+                    <label for="{{ form.username.name }}" class="col-sm-4 col-form-label">{{ form.username.label }}</label>
                     <div class="col-sm-8">
                         {{ form.username }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="{{ form.password.name }}" class="col-sm-4 col-form-label">Password: </label>
+                    <label for="{{ form.password.name }}" class="col-sm-4 col-form-label">{{ form.password.label }}</label>
                     <div class="col-sm-8">
                         {{ form.password }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="{{ form.confirm_password.name }}" class="col-sm-4 col-form-label">Conferma password: </label>
+                    <label for="{{ form.confirm_password.name }}" class="col-sm-4 col-form-label">{{ form.confirm_password.label }}</label>
                     <div class="col-sm-8">
                         {{ form.confirm_password }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="{{ form.first_name.name }}" class="col-sm-4 col-form-label">Nome: </label>
+                    <label for="{{ form.first_name.name }}" class="col-sm-4 col-form-label">{{ form.first_name.label }}</label>
                     <div class="col-sm-8">
                         {{ form.first_name }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="{{ form.last_name.name }}" class="col-sm-4 col-form-label">Cognome: </label>
+                    <label for="{{ form.last_name.name }}" class="col-sm-4 col-form-label">{{ form.last_name.label }}</label>
                     <div class="col-sm-8">
                         {{ form.last_name }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="{{ form.email.name }}" class="col-sm-4 col-form-label">E-mail: </label>
+                    <label for="{{ form.email.name }}" class="col-sm-4 col-form-label">{{ form.email.label }}</label>
                     <div class="col-sm-8">
                         {{ form.email }}
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">Tipo di utente: </label>
+                    <label class="col-sm-4 col-form-label">{{ form.user_type.label }}</label>
                     <div class="col-sm-8">
-                        {% for radio in form.type %}
+                        {% for radio in form.user_type %}
                             <div class="custom-control custom-radio custom-control-inline">
                                 {{ radio.tag }}
                             <label class="custom-control-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
@@ -59,48 +77,48 @@
                 </div>
                 <div id="restaurant-registration" class="collapse">
                     <div class="form-group row">
-                        <label for="{{ form.restaurant_name.name }}" class="col-sm-4 col-form-label">Nome del ristorante: </label>
+                        <label for="{{ form.restaurant_name.name }}" class="col-sm-4 col-form-label">{{ form.restaurant_name.label }}</label>
                         <div class="col-sm-8">
                             {{ form.restaurant_name }}
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="{{ form.city.name }}" class="col-sm-4 col-form-label">Città: </label>
+                        <label for="{{ form.city.name }}" class="col-sm-4 col-form-label">{{ form.city.label }}</label>
                         <div class="col-sm-8">
                             {{ form.city }}
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="{{ form.address.name }}" class="col-sm-4 col-form-label">Indirizzo: </label>
+                        <label for="{{ form.address.name }}" class="col-sm-4 col-form-label">{{ form.address.label }}</label>
                         <div class="col-sm-8">
                             {{ form.address }}
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col col-sm-6">
-                            <label for="{{ form.kitchen_types.name }}">Tipi di cucina: </label>
+                            <label for="{{ form.kitchen_types.name }}">{{ form.kitchen_types.label }}</label>
                             {{ form.kitchen_types }}
                         </div>
                         <div class="col col-sm-6">
-                            <label for="{{ form.services.name }}">Servizi: </label>
+                            <label for="{{ form.services.name }}">{{ form.services.label }}</label>
                             {{ form.services }}
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="{{ form.n_places.name }}" class="col-sm-4 col-form-label">Nº posti: </label>
+                        <label for="{{ form.n_places.name }}" class="col-sm-4 col-form-label">{{ form.n_places.label }}</label>
                         <div class="col-sm-8">
                             {{ form.n_places }}
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="{{ form.booking_duration.name }}" class="col-sm-4 col-form-label">Durata prenotazione (in minuti): </label>
+                        <label for="{{ form.booking_duration.name }}" class="col-sm-4 col-form-label">{{ form.booking_duration.label }}</label>
                         <div class="col-sm-8">
                             {{ form.booking_duration }}
                         </div>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <input type="submit" class="primary-btn text-uppercase" value="Registra"/>
+                    <input type="submit" class="primary-btn text-uppercase" value="{{ register_button }}"/>
                 </div>
             </form>
         </div>

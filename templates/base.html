@@ -37,18 +37,18 @@
                     <ul class="nav mr-auto nav-menu">
                         <li><a href="{% url 'booking:index' %}">Home</a></li>
                         {% if user.is_authenticated %}
-                            <li><a href="{% url 'user_management:user_info' user.id %}">Gestione utente</a></li>
-                            {% if user.user_type == user.TYPES.2.0 %}
-                                <li><a href="{% url 'user_management:restaurant_info' user.restaurant_information.id %}">Gestione ristorante</a></li>
-                                <li><a href="{% url 'user_management:restaurant_bookings' user.restaurant_information.id %}">Resoconto prenotazioni</a></li>
-                            {% elif user.user_type == user.TYPES.1.0 %}
-                                <li><a href="{% url 'user_management:client_bookings' user.id %}">Gestione prenotazioni</a></li>
+                            <li><a href="{% url 'user_management:user_info' %}">Gestione utente</a></li>
+                            {% if user.user_type == user.TYPES.1.0 %}
+                                <li><a href="{% url 'user_management:restaurant_info' %}">Gestione ristorante</a></li>
+                                <li><a href="{% url 'booking:restaurant_bookings' %}">Resoconto prenotazioni</a></li>
+                            {% elif user.user_type == user.TYPES.0.0 %}
+                                <li><a href="{% url 'booking:client_bookings' %}">Gestione prenotazioni</a></li>
                             {% endif %}
                         {% endif %}
                     </ul>
                         <ul class="nav nav-menu ml-auto">
                     {% if user.is_authenticated %}
-                            <li><a href="{% url 'logout' %}?next={% url 'booking:index' %}">Logout</a></li>
+                            <li><a href="{% url 'user_management:logout' %}">Logout</a></li>
                     {% else %}
                             <li><a href="{% url 'user_management:registration' %}?next={{request.path}}">Registrati</a></li>
                             <li><a href="{% url 'login' %}?next={{request.path}}">Login</a></li>

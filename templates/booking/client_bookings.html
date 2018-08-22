@@ -1,33 +1,36 @@
 {% extends "user_management/user_base.html" %}
 {% load static %}
 {% block head %}
-    <title>Prenotazioni</title>
+    <title>{{ webpage_title }}</title>
 {% endblock %}
 {% block content %}
     <div class="container">
-        <hr />
-        {% for booking in object_list %}
+        <div class="row margin-top-30 margin-bottom-30">
+            <h3 class="text-success">{{ active_bookings_title }}</h3>
+        </div>
+        {% for booking in booking_list %}
+            <hr />
             <div class="result-element" data-id="{{ booking.id }}" >
                 <div class="row align-items-center">
-                    <div class="col-lg-3">
-                        <img class="img-thumbnail rounded float-left img-results" src="{% if booking.restaurant.images.all.0 %}{{ booking.restaurant.images.all.0.image.url }}{% else %}{% static "img/unknown-site.png" %}{% endif %}" alt="">
+                    <div class="col-sm-3">
+                        <img class="img-thumbnail rounded float-left img-results" src="{% if booking.restaurant.images.all.0 %}{{ booking.restaurant.images.all.0.image.url }}{% else %}{% static "img/no-image.png" %}{% endif %}" alt="">
                     </div>
-                    <div class="col-lg-6">
-                        <h3>{{ restaurant.name }}</h3>
+                    <div class="col-sm-6">
+                        <h3>{{ booking.restaurant.name }}</h3>
                         <p class="result-detail">
-                            <span class="detail-label">Nome: </span>{{ booking.restaurant.name }}
+                            <span class="detail-label">{{ name_label }} </span>{{ booking.restaurant.name }}
                             <br>
-                            <span class="detail-label">Indirizzo: </span>{{ booking.restaurant.address }}, {{ booking.restaurant.city }}
+                            <span class="detail-label">{{ address_label }} </span>{{ booking.restaurant.address }}, {{ booking.restaurant.city }}
                             <br>
-                            <span class="detail-label">Stato: </span>{{ booking.get_state_display }}
+                            <span class="detail-label">{{ state_label }} </span>{{ booking.get_state_display }}
                         </p>
                     </div>
-                    <div class="col-lg-3">
-                        <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' booking.restaurant.id %}">Dettagli</a>
+                    <div class="col-sm-3">
+                        <a class="primary-btn text-uppercase" href="{% url 'booking:restaurant_detail' booking.restaurant.id %}">{{ details_button }}</a>
                         <br>
-                        <a class="client-edit-booking primary-btn text-uppercase" data-toggle="collapse" href="#editBooking{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="editBooking{{ forloop.counter }}">Modifica <i class="fa fa-chevron-down"></i></a>
+                        <a class="client-edit-booking primary-btn text-uppercase" data-toggle="collapse" href="#editBooking{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="editBooking{{ forloop.counter }}">{{ edit_button }} <i class="fa fa-chevron-down"></i></a>
                         <br>
-                        <button type="button" data-url="{% url 'booking:delete_booking' %}" class="primary-btn text-uppercase delete-client-booking" href="">Elimina</button>
+                        <button type="button" data-url="{% url 'booking:delete_booking' %}" class="primary-btn text-uppercase delete-client-booking" href="">{{ delete_button }}</button>
                     </div>
                 </div>
                 <div class="collapse row align-items-center" id="editBooking{{ forloop.counter }}">
@@ -35,21 +38,47 @@
                         <div id="client_bookings_datetimepicker{{ booking.id }}" class="client_bookings_datetimepicker" data-start="{{ booking.start_time|date:"Y-m-d\TH:i:s" }}"></div>
                     </div>
                     <div class="col-sm-2">
-                        <label for="n_places">Nº posti: </label>
+                        <label for="n_places">{{ n_places_label }} </label>
                         <input type="number" name="n_places" value="{{ booking.n_places }}" class="form-control"/>
                     </div>
                     <input type="hidden" name="start_time" value="{{ booking.start_time|date:"Y-m-d-H-i-s" }}"/>
                     <input type="hidden" name="state" value="{{ booking.state }}"/>
                     <div class="col-sm-2">
-                        <button type="button" data-restaurant_id="{{ booking.restaurant.id }}" data-url="{% url 'booking:check_availability' %}" class="check-availability-for-edit row primary-btn primary-btn-blue text-uppercase justify-content-center">Disponibilità</button>
-                        <span class="booking-availability-for-edit row margin-top-15 margin-bottom-15 text-info justify-content-center"></span>
+                        <button type="button" data-restaurant_id="{{ booking.restaurant.id }}" data-client_id="{{ user.id }}" data-url="{% url 'booking:check_availability' %}" class="check-availability-for-edit row primary-btn primary-btn-blue text-uppercase justify-content-center">{{ availability_button }}</button>
+                        <span class="text-center booking-availability-for-edit row margin-top-15 margin-bottom-15 text-info justify-content-center"></span>
                         <div class="justify-content-center row">
-                            <button disabled type="button" data-url="{% url 'booking:edit_booking' %}" class="save-edit-booking primary-btn text-uppercase">Salva</button>
+                            <button disabled type="button" data-url="{% url 'booking:edit_booking' %}" class="save-edit-booking primary-btn text-uppercase">{{ save_button }}</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <hr />
         {% endfor %}
+        <hr />
+        <div class="row margin-top-30 margin-bottom-30">
+            <h3 class="text-danger">{{ old_bookings_title }}</h3>
+        </div>
+        {% for booking in old_bookings %}
+            <hr />
+            <div class="result-element" data-id="{{ booking.id }}" >
+                <div class="row align-items-center">
+                    <div class="col-sm-3">
+                        <img class="img-thumbnail rounded float-left img-results" src="{% if booking.restaurant.images.all.0 %}{{ booking.restaurant.images.all.0.image.url }}{% else %}{% static "img/no-image.png" %}{% endif %}" alt="">
+                    </div>
+                    <div class="col-sm-6">
+                        <h3>{{ booking.restaurant.name }}</h3>
+                        <p class="result-detail">
+                            <span class="detail-label">{{ name_label }} </span>{{ booking.restaurant.name }}
+                            <br>
+                            <span class="detail-label">{{ address_label }} </span>{{ booking.restaurant.address }}, {{ booking.restaurant.city }}
+                            <br>
+                            <span class="detail-label">{{ state_label }} </span>{{ booking.get_state_display }}
+                            <br>
+                            <span class="detail-label">{{ date_label }} </span>{{ booking.start_time|date:"d/m/Y - H:i" }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <hr />
     </div>
 {% endblock %}

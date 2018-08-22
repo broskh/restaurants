@@ -6,7 +6,8 @@ $(document).ready(function() {
     });
 
     $(".date-picker").datepicker({
-        format: 'dd/mm/yyyy' });
+        format: 'dd/mm/yyyy',
+        startDate: new Date() });
 
     let timePicker = $(".time-picker");
     timePicker.timepicker({ timeFormat: 'H:i',
@@ -42,6 +43,9 @@ $(document).ready(function() {
     }
     else {
         default_date = new Date(default_date);
+        if (default_date < new Date()) {
+            default_date = false;
+        }
     }
     datetimepicker.datetimepicker({
         inline: true,
@@ -69,6 +73,9 @@ $(document).ready(function() {
         }
         else {
             default_date = new Date(default_date);
+        if (default_date < new Date()) {
+            default_date = false;
+        }
         }
         $(this).datetimepicker({
             inline: true,
@@ -89,12 +96,12 @@ $(document).ready(function() {
         });
     });
 
-    $("input[type='radio'][name='type']").change(function(){
-        if (this.value === '3') {
-            $("#restaurant-registration").removeClass('collapse')
+    $("input[type='radio'][name='user_type']").change(function(){
+        if (this.value === '2') {
+            $("#restaurant-registration").removeClass('collapse');
         }
         else {
-            $("#restaurant-registration").addClass('collapse')
+            $("#restaurant-registration").addClass('collapse');
         }
     });
 
@@ -162,39 +169,47 @@ $(document).ready(function() {
         let input_price = $('#new-voice-price');
         let voice_name = input_name.val();
         let voice_price = input_price.val();
-        input_name.val('');
-        input_price.val('');
-        let new_voice_id = 'new-voice-'+new Date().getTime();
-        let new_category_element = '<li class="list-group-item new" data-id="'+new_voice_id+'">\n'+
-                                    '<span>'+voice_name+' - '+voice_price+'€</span>\n'+
-                                        '<button type="button" class="delete-voice btn ml-auto btn-default">\n'+
-                                            '<span class="fa fa-trash"></span>\n'+
-                                        '</button>\n'+
-                                '</li>';
-        let div = $('#menu-voices').find('div.active');
-        let voices_ul = div.find('ul').first();
-        voices_ul.append(new_category_element);
-
-        let hidden_voices = $('#id_add_voices');
-        let array = hidden_voices.val();
-        let element = {
-            'id': new_voice_id,
-            'category_id': $('#'+div.attr('aria-labelledby')).data('id'),
-            'name': voice_name,
-            'price': voice_price
-        };
-        if (array === "") {
-            array = [element];
+        if (!isFloat(voice_price)) {
+            $('#new-voice').after('<div class="margin-top-15 alert alert-danger alert-dismissible">\n' +
+                    '  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>\n' +
+                    '  Il prezzo inserito non è valido' +
+                    '</div>');
         }
         else {
-            array = JSON.parse(array);
-            array.push(element);
-        }
-        hidden_voices.val(JSON.stringify(array));
+            input_name.val('');
+            input_price.val('');
+            let new_voice_id = 'new-voice-'+new Date().getTime();
+            let new_category_element = '<li class="list-group-item new" data-id="'+new_voice_id+'">\n'+
+                                        '<span>'+voice_name+' - '+Number.parseFloat(voice_price).toFixed(2)+'€</span>\n'+
+                                            '<button type="button" class="delete-voice btn ml-auto btn-default">\n'+
+                                                '<span class="fa fa-trash"></span>\n'+
+                                            '</button>\n'+
+                                    '</li>';
+            let div = $('#menu-voices').find('div.active');
+            let voices_ul = div.find('ul').first();
+            voices_ul.append(new_category_element);
 
-        $(".delete-voice").click(function() {
-            deleteVoice($(this));
-        });
+            let hidden_voices = $('#id_add_voices');
+            let array = hidden_voices.val();
+            let element = {
+                'id': new_voice_id,
+                'category_id': $('#'+div.attr('aria-labelledby')).data('id'),
+                'name': voice_name,
+                'price': voice_price
+            };
+            if (array === "") {
+                array = [element];
+            }
+            else {
+                array = JSON.parse(array);
+                array.push(element);
+            }
+            hidden_voices.val(JSON.stringify(array));
+
+            $(".delete-voice").click(function() {
+                deleteVoice($(this));
+            });
+        }
     });
 
     $(".delete-category").click(function() {
@@ -251,27 +266,39 @@ $(document).ready(function() {
         let start_time = result_element.find("input[name='start_time']").val();
         let booking_id = result_element.data('id');
         let id = button.data('restaurant_id');
-        $.ajax({
-            url: url,
-            data: { 'restaurant_id' : id,
-                    'n_places' : n_places,
-                    'start_time' : start_time,
-                    'booking_id' : booking_id },
-            method: 'POST',
-            success: function(response){
-                let save_button = result_element.find(".save-edit-booking");
-                if (response['result'] === 'ok') {
-                    result_element.find(".booking-availability-for-edit").html('Disponibile');
-                    save_button.html('Salva');
+        let client_id = button.data('client_id');
+        if (!isInt(n_places)) {
+            $("#booking-availability").html('Dati inseriti non validi');
+        }
+        else {
+            $.ajax({
+                url: url,
+                data: { 'restaurant_id' : id,
+                        'n_places' : n_places,
+                        'start_time' : start_time,
+                        'booking_id' : booking_id ,
+                        'client_id' : client_id },
+                method: 'POST',
+                success: function(response){
+                    let save_button = result_element.find(".save-edit-booking");
+                    if (response['state'] === 1) {
+                        result_element.find(".booking-availability-for-edit").html('Disponibile');
+                        save_button.html('Salva');
+                        save_button.prop('disabled', false);
+                        result_element.find("input[name='state']").val(response['state']);
+                    }
+                    else if (response['state'] === 0) {
+                        result_element.find(".booking-availability-for-edit").html('Non Disponibile');
+                        save_button.html('Vai in coda');
+                        save_button.prop('disabled', false);
+                        result_element.find("input[name='state']").val(response['state']);
+                    }
+                    else {
+                        result_element.find(".booking-availability-for-edit").html('Prenotazione già esistente');
+                    }
                 }
-                else if (response['result'] === 'busy') {
-                    result_element.find(".booking-availability-for-edit").html('Non Disponibile');
-                    save_button.html('Vai in coda');
-                }
-                save_button.prop('disabled', false);
-                result_element.find("input[name='state']").val(response['state']);
-            }
-        });
+            });
+        }
     });
 
     save_edit_booking.click(function() {
@@ -319,30 +346,42 @@ $(document).ready(function() {
     $("#check-availability").click(function() {
         let button = $(this);
         let url = button.data('url');
-        let n_places = $("#id_n_places").val();
+        let n_places_element = $("#id_n_places");
+        let n_places = n_places_element.val();
         let start_time = $("#id_start_time").val();
-        let id = button.data('restaurant_id');
-        $.ajax({
-            url: url,
-            data: { 'restaurant_id' : id,
-                 'n_places' : n_places,
-                 'start_time' : start_time },
-            method: 'POST',
-            success: function(response){
-                let book_button = $("#book-button");
-                if (response['result'] === 'ok') {
-                    $("#booking-availability").html('Disponibile');
-                    book_button.prop('disabled', false);
-                    book_button.val('Prenota');
+        let restaurant_id = button.data('restaurant_id');
+        let client_id = button.data('client_id');
+        if (!isInt(n_places)) {
+            $("#booking-availability").html('Dati inseriti non validi');
+        }
+        else {
+            $.ajax({
+                url: url,
+                data: { 'restaurant_id' : restaurant_id,
+                        'n_places' : n_places,
+                        'client_id' : client_id,
+                        'start_time' : start_time },
+                method: 'POST',
+                success: function(response){
+                    let book_button = $("#book-button");
+                    if (response['state'] === 1) {
+                        $("#booking-availability").html('Disponibile');
+                        book_button.val('Prenota');
+                        book_button.prop('disabled', false);
+                        $("#id_state").val(response['state']);
+                    }
+                    else if (response['state'] === 0) {
+                        $("#booking-availability").html('Non disponibile');
+                        book_button.val('Vai in coda');
+                        book_button.prop('disabled', false);
+                        $("#id_state").val(response['state']);
+                    }
+                    else {
+                        $("#booking-availability").html('Prenotazione già esistente');
+                    }
                 }
-                else if (response['result'] === 'busy') {
-                    $("#booking-availability").html('Non disponibile');
-                    book_button.prop('disabled', false);
-                    book_button.val('Vai in coda');
-                }
-                $("#id_state").val(response['state']);
-            }
-        });
+            });
+        }
     });
 
     $("#restaurant_bookings_datetimepicker").on("dp.change",function (e) {
@@ -454,4 +493,13 @@ function deleteVoice(button) {
         hidden_add_voices.val(JSON.stringify(array));
     }
     voice.remove();
+}
+
+function isInt(value) {
+    return !isNaN(value) && !isNaN(parseInt(value, 10));
+}
+
+function isFloat(inputtxt) {
+    let decimal = /^[-+]?[0-9]+\.[0-9]+$/;
+    return inputtxt.match(decimal)
 }
