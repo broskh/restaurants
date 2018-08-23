@@ -1,5 +1,5 @@
-from math import radians, sin, atan2, sqrt, cos
 import requests
+
 from django.db.models import Sum, Q
 
 from booking.models import Booking
@@ -11,7 +11,6 @@ GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
 def get_coordinates(address):
     params = {
         'address': address,
-        # 'sensor': 'false',
         'region': 'it',
         'key': 'AIzaSyCtDBXSlOMuLNiKQyWjgJyJw9K8ZC5SndA',
     }
@@ -31,5 +30,5 @@ def count_bookings(restaurant_id, time):
         if not occupied_places:
             occupied_places = 0
         return occupied_places
-    except (Restaurant.DoesNotExist):
+    except Restaurant.DoesNotExist:
         raise Restaurant.DoesNotExist

@@ -1,0 +1,34 @@
+INSTALLAZIONE:
+
+1) Prima di tutto è necessario rendere python3.5 la versione utilizzata di default dal sistema digitando nella shell:
+    sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+    sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.5 2
+
+2) A questo punto è possibile procedere installando Django 1.11 e MySQLcon i seguenti comandi:
+    sudo apt install python3-setuptools python3-dev python-pip python3-pip mysql-server libmysqlclient-dev
+    pip install Django==1.11 django-mysql wheel mysqlclient
+
+3) Infine è sufficiente estrarre il progetto dall'archivio ed eseguire il codice sql per la creazione e configurazione del database contenente anche alcuni dati di esempio (sostituire 'password' con la password dell'utente root di MySQL e eventualmente sostituire anche 'root' se si vuole utilizzare un altro utente con gli appositi permessi):
+    tar zxvf restaurants.tar.gz
+    cd restaurants
+    sudo mysql -u root -p password < djangorestaurants.sql
+
+4) È ora possibile utilizzare l'applicazione visitando da browser l'indirizzo 'http://127.0.0.1:8000/' dopo aver avviato il server con:
+    python manage.py runserver
+
+
+DATI ESEMPIO:
+
+Le credenziali per poter accedere con i dati d'esempio forniti sono le seguenti:
+    SUPERUSER - username: admin, password: rest2018
+    CLIENTE - username: giovannipascoli, password: rest2018
+    CLIENTE - username: ugofoscolo, password: rest2018
+    RISTORANTE - username: giuseppegaribaldi, password: rest2018
+    RISTORANTE - username: alessandromanzoni, password: rest2018
+    RISTORANTE - username: giacomoleopardi, password: rest2018
+    RISTORANTE - username: luigipirandello, password: rest2018
+    RISTORANTE - username: giovanniverga, password: rest2018
+
+
+# Procedura testata su sistema operativo Linux Mint 18.2 Cinnamon 64-bit
+# Applicazione testata su browser Google Chrome 68.0.3440.106

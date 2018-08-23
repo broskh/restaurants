@@ -207,7 +207,7 @@ class CountRestourantsBookingsWiewTests(TestCase):
         )
         self.restaurant_user.set_password(self.password)
         self.restaurant_user.save()
-        self.booking = Booking (
+        self.booking = Booking(
             client=self.client_user,
             restaurant=self.restaurant,
             start_time=self.datetime,
@@ -257,7 +257,6 @@ class CountRestourantsBookingsWiewTests(TestCase):
         self.assertJSONEqual(str(response.content, encoding='utf8'), data_result)
 
     def test_restaurant_logged_ajax_call_without_booking(self):
-        # self.booking.save()
         self.client.login(username=self.restaurant_user.username, password=self.password)
 
         data = {

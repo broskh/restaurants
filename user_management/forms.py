@@ -112,39 +112,34 @@ class RestaurantInfoForm (forms.ModelForm):
 
 class RegistrationForm (UserInfoForm):
 
-    restaurant_name = forms.CharField(widget=forms.TextInput(attrs={
-            'class': 'form-control'}),
-            required=False,
-            max_length=200,
-            label='Nome del ristorante:')
+    restaurant_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),
+                                      required=False,
+                                      max_length=200,
+                                      label='Nome del ristorante:')
     kitchen_types = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(),
-            choices=KitchenType.objects.values_list('id', 'value'),
-            required=False,
-            label='Tipi di cucina:')
+                                              choices=KitchenType.objects.values_list('id', 'value'),
+                                              required=False,
+                                              label='Tipi di cucina:')
     services = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(),
-            choices=Service.objects.values_list('id', 'value'),
-            required=False,
-            label='Serivizi:')
-    city = forms.CharField(widget=forms.TextInput(attrs={
-            'class': 'form-control'}),
-            required=False,
-            max_length=150,
-            label='Città:')
-    address = forms.CharField(widget=forms.TextInput(attrs={
-            'class': 'form-control'}),
-            required=False,
-            max_length=150,
-            label='Indirizzo:')
-    n_places = forms.CharField(widget=forms.NumberInput(attrs={
-            'class': 'form-control',
-            'min': 1}),
-            required=False,
-            label='Nº posti:')
-    booking_duration = forms.CharField(widget=forms.NumberInput(attrs={
-            'class': 'form-control',
-            'min': 1}),
-            required=False,
-            label='Durata prenotazione (in minuti):')
+                                         choices=Service.objects.values_list('id', 'value'),
+                                         required=False,
+                                         label='Serivizi:')
+    city = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),
+                           required=False,
+                           max_length=150,
+                           label='Città:')
+    address = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),
+                              required=False,
+                              max_length=150,
+                              label='Indirizzo:')
+    n_places = forms.CharField(widget=forms.NumberInput(attrs={'class': 'form-control',
+                                                               'min': 1}),
+                               required=False,
+                               label='Nº posti:')
+    booking_duration = forms.CharField(widget=forms.NumberInput(attrs={'class': 'form-control',
+                                                                       'min': 1}),
+                                       required=False,
+                                       label='Durata prenotazione (in minuti):')
 
     class Meta(UserInfoForm.Meta):
         fields = UserInfoForm.Meta.fields + ['user_type']
