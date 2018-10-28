@@ -14,6 +14,7 @@ The search results are sorted by proximity to the search site.
 <br>
 A registered user can put himself on the waiting list for the busy restaurant and will receive 
 an e-mail when the seats are available.
+
 ![Restaurants - Home](https://imgur.com/TDvNizR.png)
 
 ## Requirements
@@ -39,7 +40,6 @@ If they aren't installed follow these steps:
 
 `python manage.py runserver`.
 - Visit with a browser 'http://127.0.0.1:8000/' to use the application.
-<br>
 <br>
 
 > Tested on *Linux Mint 18.2 Cinnamon 64-bit*.
