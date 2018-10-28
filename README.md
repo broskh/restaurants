@@ -41,7 +41,8 @@ If they aren't installed follow these steps:
 - Visit with a browser 'http://127.0.0.1:8000/' to use the application.
 
 > Tested on *Linux Mint 18.2 Cinnamon 64-bit*.
-> Tested on *Google Chrome 68.0.3440.106*.
+<br>
+Tested on *Google Chrome 68.0.3440.106*.
 
 ## Sample data
 Example of user credentials:
