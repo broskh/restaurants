@@ -14,6 +14,7 @@ The search results are sorted by proximity to the search site.
 <br>
 A registered user can put himself on the waiting list for the busy restaurant and will receive 
 an e-mail when the seats are available.
+<br>
 ![Restaurants - Home](https://imgur.com/TDvNizR.png)
 
 ## Requirements
