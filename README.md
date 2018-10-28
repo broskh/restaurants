@@ -27,6 +27,7 @@ If they aren't installed follow these steps:
 `sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.5 2`
 - Install Django1.11, MySql and other necessary packages:
 <br>
+
 `sudo apt install python3-setuptools python3-dev python-pip python3-pip mysql-server libmysqlclient-dev`
 <br>
 `pip install Django==1.11 django-mysql wheel mysqlclient`
@@ -35,9 +36,11 @@ If they aren't installed follow these steps:
 - Open a terminal in the directory.
 - Run to load example db:
 <br>
+
 `sudo mysql -u root -p password < djangorestaurants.sql`.
 - Run the server typing:
 <br>
+
 `python manage.py runserver`.
 - Visit with a browser 'http://127.0.0.1:8000/' to use the application.
 <br>
