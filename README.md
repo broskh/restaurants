@@ -20,13 +20,11 @@ an e-mail when the seats are available.
 To run Restaurants the system requires Python3.5, Django 1.11 and MySql.
 If they aren't installed follow these steps:
 - Set python3.5 as default python interpreter by typing in the shell:
-<br>
 
 `sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1`
 <br>
 `sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.5 2`
 - Install Django1.11, MySql and other necessary packages:
-<br>
 
 `sudo apt install python3-setuptools python3-dev python-pip python3-pip mysql-server libmysqlclient-dev`
 <br>
@@ -35,11 +33,9 @@ If they aren't installed follow these steps:
 - Extract the contents.
 - Open a terminal in the directory.
 - Run to load example db:
-<br>
 
 `sudo mysql -u root -p password < djangorestaurants.sql`.
 - Run the server typing:
-<br>
 
 `python manage.py runserver`.
 - Visit with a browser 'http://127.0.0.1:8000/' to use the application.
