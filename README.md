@@ -2,13 +2,16 @@
 
 ## Description
 Restaurants is a Django-based web application to manage a restaurant bookings system.
+<br>
 There are 3 types of user:
 - The anonymous user who can search for restaurants available by day, time, place,
 types of kitchen and services offered.
 - The registered user who can make reservations, can modify and delete them and see the history.
 - The restaurant owner who can, upon registration, insert information about the restaurant as
 types of kitchen, services provided, address, menu, photos, number of seats and duration of the reservation.
+<br>
 The search results are sorted by proximity to the search site.
+<br>
 A registered user can put himself on the waiting list for the busy restaurant and will receive 
 an e-mail when the seats are available.
 
